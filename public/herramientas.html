@@ -409,8 +409,23 @@ async function getAllPages(baseUrl,itemsKey,onPage){
   let page=1, all=[], totalPages=1;
   do{
     const sep=baseUrl.includes('?')?'&':'?';
-    const data=await dFetch(`${baseUrl}${sep}page=${page}&per_page=100`);
+    const url=`${baseUrl}${sep}page=${page}&per_page=100`;
+    const data=await dFetch(url);
+    // Debug: log all top-level keys on first page
+    if(page===1){
+      const keys=Object.keys(data);
+      log(`Respuesta API — claves: [${keys.join(', ')}]`);
+      const pagination=data.pagination;
+      if(pagination) log(`Paginación: ${pagination.items||0} items, ${pagination.pages||1} páginas`);
+    }
     const items=data[itemsKey]||[];
+    // If key not found, try to auto-detect
+    if(items.length===0 && page===1){
+      const arrayKeys=Object.keys(data).filter(k=>Array.isArray(data[k]));
+      if(arrayKeys.length>0){
+        log(`Clave "${itemsKey}" vacía, claves con arrays: [${arrayKeys.join(', ')}]`,'warn');
+      }
+    }
     all=all.concat(items);
     totalPages=data.pagination?.pages||1;
     if(onPage) onPage(page,totalPages,all.length);
@@ -475,39 +490,63 @@ async function startProcess(){
     log(`Colección: ${collIds.size} discos`,'ok');
     setProgress(36,'Cargando historial de compras...');
 
-    // 3. Orders
+    // 3. Purchases (buyer side — /marketplace/purchases endpoint)
     log('Obteniendo historial de compras...');
-    const orders=await getAllPages(
-      `${API}/marketplace/orders?status=All&sort=created&sort_order=desc`,
-      'orders',
-      (p,t,n)=>{
-        setProgress(36+Math.round((p/t)*25),`Órdenes: página ${p}/${t} (${n} órdenes)`);
-        log(`Órdenes página ${p}/${t}`);
-      }
-    );
-    log(`Órdenes encontradas: ${orders.length}`,'ok');
+    let purchases=[];
+    try{
+      purchases=await getAllPages(
+        `${API}/marketplace/purchases?status=All&sort=created&sort_order=desc`,
+        'purchases',
+        (p,t,n)=>{
+          setProgress(36+Math.round((p/t)*25),`Compras: página ${p}/${t} (${n} compras)`);
+          log(`Compras página ${p}/${t}`);
+        }
+      );
+      log(`Compras encontradas: ${purchases.length}`,'ok');
+    }catch(e){
+      log(`Nota: /marketplace/purchases devolvió error (${e.message}), intentando con /marketplace/orders...`,'warn');
+      // fallback to orders endpoint
+      purchases=await getAllPages(
+        `${API}/marketplace/orders?status=All&sort=created&sort_order=desc`,
+        'orders',
+        (p,t,n)=>{
+          setProgress(36+Math.round((p/t)*25),`Órdenes: página ${p}/${t} (${n} órdenes)`);
+          log(`Órdenes página ${p}/${t}`);
+        }
+      );
+      log(`Órdenes encontradas: ${purchases.length}`,'ok');
+    }
     setProgress(62,'Comparando compras con colección...');
 
-    // 4. Compare
-    const validStatuses=['Shipped','Received','Merged','Invoice Sent','Payment Received'];
+    // 4. Compare — handle both purchases and orders response shapes
     const seen=new Set();
     let totalPurchased=0;
-    for(const order of orders){
-      if(!validStatuses.includes(order.status)) continue;
-      for(const item of (order.items||[])){
-        const rid=item.release?.id;
+    for(const purchase of purchases){
+      // /marketplace/purchases returns items directly on the purchase object
+      // /marketplace/orders returns items in an items array
+      const items=purchase.items||[purchase].filter(p=>p.release?.id);
+      const status=purchase.status||'';
+      // For orders endpoint, filter by valid statuses; for purchases endpoint allow all
+      const validStatuses=['Shipped','Received','Merged','Invoice Sent','Payment Received','Payment Pending','In Progress'];
+      if(purchase.items && !validStatuses.includes(status)) continue;
+
+      for(const item of items){
+        // purchases endpoint: release info at item.release or top-level
+        const release=item.release||purchase.release||{};
+        const rid=release.id;
         if(!rid) continue;
         totalPurchased++;
         if(seen.has(rid)) continue;
         seen.add(rid);
         if(!collIds.has(rid)){
+          const price=item.price||purchase.price||{};
           missingItems.push({
             release_id:rid,
-            title:item.release?.description||item.release?.title||'—',
-            artist:extractArtist(item.release?.description||''),
+            title:release.description||release.title||'—',
+            artist:extractArtist(release.description||''),
             year:'',format:'',label:'',catno:'',
-            order_id:order.id,
-            price:item.price?.value?`${item.price.value} ${item.price.currency||''}`.trim():'—'
+            order_id:purchase.id||'',
+            price:price.value?`${price.value} ${price.currency||''}`.trim():'—'
           });
         }
       }
