@@ -438,50 +438,47 @@ function closeMobileMenu(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMobileMenu();});
 
-// ===== YOUTUBE VIDEOS =====
-const CHANNEL='UCV5Tbnk8BtMrgH-eIwtAOew';
+// ===== YOUTUBE VIDEOS (via Vercel function — YouTube Data API v3) =====
 async function loadVideos(){
   const grid=document.getElementById('vGrid');
-  grid.innerHTML='<p style="color:var(--gray);font-size:13px;letter-spacing:2px;">Cargando videos...</p>';
+  grid.innerHTML='<p style="color:var(--gray);font-size:13px;letter-spacing:2px;padding:20px;">Cargando videos...</p>';
   try{
-    const proxy=`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id='+CHANNEL)}`;
-    const res=await fetch(proxy,{signal:AbortSignal.timeout(7000)});
+    const res=await fetch('/api/youtube',{signal:AbortSignal.timeout(10000)});
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const data=await res.json();
-    const xml=new DOMParser().parseFromString(data.contents,'text/xml');
-    const entries=Array.from(xml.querySelectorAll('entry')).slice(0,6);
-    if(!entries.length) throw new Error('no entries');
+    if(data.error) throw new Error(data.error);
+    const videos=data.videos||[];
+    if(!videos.length) throw new Error('no videos');
     grid.innerHTML='';
-    entries.forEach((e,i)=>{
-      const vid=e.querySelector('videoId')?.textContent||e.querySelector('id')?.textContent?.split(':').pop()||'';
-      const title=e.querySelector('title')?.textContent||'Video';
-      const pub=e.querySelector('published')?.textContent||'';
-      const dateStr=pub?new Date(pub).toLocaleDateString(lang==='es'?'es-UY':'en-US',{year:'numeric',month:'short',day:'numeric'}):'';
-      const views=e.querySelector('statistics')?.getAttribute('viewCount')||'';
-      const era=(title.match(/\b(70|80|90)s?\b/i)?.[0]?.replace(/s$/i,'')+'s')||'80s';
+    videos.forEach((v,i)=>{
+      const era=(v.title.match(/\b(70|80|90)s?\b/i)?.[0]?.replace(/s$/i,'')+'s')||'80s';
+      const dateStr=v.publishedAt?new Date(v.publishedAt).toLocaleDateString(lang==='es'?'es-UY':'en-US',{year:'numeric',month:'short',day:'numeric'}):'';
+      const views=v.views?Number(v.views).toLocaleString():'';
       const card=document.createElement('article');
       card.className='v-card';
       card.setAttribute('role','listitem');
       card.setAttribute('tabindex','0');
-      card.setAttribute('aria-label',`Reproducir: ${title}`);
+      card.setAttribute('aria-label',`Reproducir: ${v.title}`);
       if(i===0) card.style.gridColumn='span 2';
       card.innerHTML=`
         <div class="v-thumb">
-          <img src="https://img.youtube.com/vi/${vid}/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${vid}/hqdefault.jpg'" alt="${title}" loading="lazy">
+          <img src="${v.thumbnail}" alt="Miniatura: ${v.title.replace(/"/g,'')}" loading="lazy">
           <div class="v-overlay" aria-hidden="true">
             <div class="play-circle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div>
           </div>
         </div>
         <div class="v-info">
           <span class="v-era" aria-label="Época ${era}">${era}</span>
-          <h3 class="v-title">${title.length>60?title.substring(0,60)+'…':title}</h3>
-          <p class="v-meta">${dateStr}${views?' · '+Number(views).toLocaleString()+' vistas':''}</p>
+          <h3 class="v-title">${v.title.length>60?v.title.substring(0,60)+'…':v.title}</h3>
+          <p class="v-meta">${dateStr}${views?' · '+views+' vistas':''}</p>
         </div>`;
-      card.onclick=()=>openVideo(vid,title);
-      card.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' ')openVideo(vid,title);};
+      card.onclick=()=>openVideo(v.id,v.title);
+      card.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' ')openVideo(v.id,v.title);};
       grid.appendChild(card);
     });
   }catch(err){
-    grid.innerHTML=`<div style="grid-column:1/-1;background:var(--card);border:1px solid var(--border);padding:48px 32px;text-align:center;"><p style="font-size:42px;margin-bottom:16px;">📺</p><h3 style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;margin-bottom:10px;" data-i18n="vid.fallback">Visitá el canal en YouTube</h3><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener" class="btn btn-fill" style="margin-top:16px;">Abrir Canal ↗</a></div>`;
+    console.error('YouTube load error:',err.message);
+    grid.innerHTML=`<div style="grid-column:1/-1;background:var(--card);border:1px solid var(--border);padding:48px 32px;text-align:center;"><p style="font-size:42px;margin-bottom:16px;">📺</p><h3 style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;margin-bottom:10px;">Visitá el canal en YouTube</h3><p style="color:var(--gray);font-size:12px;margin-bottom:20px;">${err.message.includes('YOUTUBE_API_KEY')?'Falta configurar YOUTUBE_API_KEY en Vercel → Environment Variables':''}</p><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener" class="btn btn-fill">Abrir Canal ↗</a></div>`;
   }
 }
 
