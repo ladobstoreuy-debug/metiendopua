@@ -230,6 +230,7 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
     <li><a href="coleccion.html" aria-current="page">Colección</a></li>
     <li><a href="index.html#buscador">Buscador Musical</a></li>
     <li><a href="index.html#sobre">Nosotros</a></li>
+    <li><a href="herramientas.html">Herramientas</a></li>
     <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal ↗</a></li>
   </ul>
   <div class="nav-right">
@@ -248,6 +249,7 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
   <a href="coleccion.html" aria-current="page" onclick="closeMenu()">Colección</a>
   <a href="index.html#buscador" onclick="closeMenu()">Buscador Musical</a>
   <a href="index.html#sobre" onclick="closeMenu()">Nosotros</a>
+  <a href="herramientas.html" onclick="closeMenu()">Herramientas</a>
   <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal YouTube ↗</a>
   <div class="mobile-nav-footer">
     <button class="lbtn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
@@ -286,6 +288,7 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
     <label for="sortSel" class="sr-only">Ordenar</label>
     <select id="sortSel" class="fsel" onchange="changeSort()" aria-label="Ordenar colección">
       <option value="added-desc" data-i18n="sort.new">Más recientes</option>
+      <option value="artist-asc" data-i18n="sort.az" selected>Artista A→Z</option>
       <option value="added-asc" data-i18n="sort.old">Más antiguos</option>
       <option value="artist-asc" data-i18n="sort.az">Artista A→Z</option>
       <option value="year-asc" data-i18n="sort.year">Año ↑</option>
@@ -326,6 +329,7 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
     <li><a href="index.html">Inicio</a></li>
     <li><a href="index.html#videos">Videos</a></li>
     <li><a href="index.html#buscador">Buscador IA</a></li>
+    <li><a href="herramientas.html">Herramientas</a></li>
     <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">YouTube ↗</a></li>
     <li><a href="https://www.discogs.com" target="_blank" rel="noopener">Discogs ↗</a></li>
   </ul>
@@ -431,7 +435,7 @@ function condClass(raw){
 }
 
 // ===== STATE =====
-let allItems=[],filteredItems=[],currentPage=1,totalPages=1,totalItems=0,viewMode='grid',sortVal='added-desc';
+let allItems=[],filteredItems=[],currentPage=1,totalPages=1,totalItems=0,viewMode='grid',sortVal='artist-asc';
 
 // ===== API =====
 async function apiFetch(params){

@@ -33,6 +33,14 @@
     {
       "source": "/collection",
       "destination": "/coleccion.html"
+    },
+    {
+      "source": "/herramientas",
+      "destination": "/herramientas.html"
+    },
+    {
+      "source": "/tools",
+      "destination": "/herramientas.html"
     }
   ]
 }
