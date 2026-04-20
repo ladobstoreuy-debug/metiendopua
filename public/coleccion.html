@@ -4,167 +4,188 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Colección de Vinilos — Metiendo Púa</title>
-<meta name="description" content="Colección personal de vinilos y CDs de Metiendo Púa. Rock y Pop clásico de los 70s, 80s y 90s.">
+<meta name="description" content="Colección personal de vinilos y CDs de Metiendo Púa. Rock y Pop clásico de los 70s, 80s y 90s con tracklist, portadas y estado de cada disco.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --black:#0A0A0A; --dark:#111; --card:#161616; --card2:#1c1c1c;
-  --border:#222; --orange:#FF6B00; --odim:rgba(255,107,0,0.12);
-  --white:#fff; --gray:#888; --gray2:#bbb; --red:#C8102E;
-}
+:root{--black:#0A0A0A;--dark:#111;--card:#161616;--border:#222;--orange:#FF6B00;--odim:rgba(255,107,0,0.12);--white:#fff;--gray:#888;--gray2:#bbb;--red:#C8102E;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
+.skip-link{position:absolute;top:-100px;left:16px;background:var(--orange);color:#fff;padding:10px 18px;font-weight:700;font-size:13px;letter-spacing:2px;text-decoration:none;z-index:99999;transition:top 0.2s;}
+.skip-link:focus{top:8px;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;}
 body{background:var(--black);color:var(--white);font-family:'Montserrat',sans-serif;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4;}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,0.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;}
 .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
 .pua{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:20px solid var(--orange);filter:drop-shadow(0 0 6px rgba(255,107,0,0.7));}
-.nav-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;}
-.nav-title span{color:var(--orange);}
+.nav-brand{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;}
+.nav-brand span{color:var(--orange);}
 .nav-links{display:flex;align-items:center;gap:28px;list-style:none;}
-.nav-links a{color:var(--gray);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;transition:color 0.2s;}
-.nav-links a:hover,.nav-links a.active{color:var(--orange);}
-.lang-wrap{display:flex;gap:6px;}
-.lbtn{background:transparent;border:1px solid var(--border);color:var(--gray);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;padding:4px 10px;cursor:pointer;transition:all 0.2s;}
-.lbtn.active,.lbtn:hover{background:var(--orange);border-color:var(--orange);color:#fff;}
+.nav-links a{color:var(--gray);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;transition:color 0.2s;padding:4px 2px;}
+.nav-links a:hover,.nav-links a[aria-current="page"]{color:var(--orange);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.lang-group{display:flex;gap:4px;}
+.lbtn{background:transparent;border:1px solid var(--border);color:var(--gray);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;padding:5px 10px;cursor:pointer;transition:all 0.2s;}
+.lbtn[aria-pressed="true"],.lbtn:hover{background:var(--orange);border-color:var(--orange);color:#fff;}
+.menu-btn{display:none;background:transparent;border:1px solid var(--border);color:var(--white);padding:8px 10px;cursor:pointer;align-items:center;justify-content:center;}
+.menu-btn svg{width:20px;height:20px;fill:currentColor;}
+.mobile-nav{display:none;position:fixed;inset:0;top:64px;background:rgba(10,10,10,0.98);z-index:999;padding:32px 24px;flex-direction:column;gap:0;}
+.mobile-nav.open{display:flex;}
+.mobile-nav a{color:var(--white);text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;padding:16px 0;border-bottom:1px solid var(--border);transition:color 0.2s;}
+.mobile-nav a:hover,.mobile-nav a[aria-current="page"]{color:var(--orange);}
+.mobile-nav-footer{margin-top:auto;padding-top:24px;display:flex;gap:8px;}
 
-/* PAGE HEADER */
+/* PAGE HERO */
 .page-hero{padding:120px 60px 56px;background:var(--dark);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
 .page-hero::after{content:'';position:absolute;right:-200px;top:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,0,0.06) 0%,transparent 70%);pointer-events:none;}
 .page-hero-inner{max-width:1400px;margin:0 auto;}
 .breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:11px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;}
 .breadcrumb a{color:var(--gray);text-decoration:none;transition:color 0.2s;}
-.breadcrumb a:hover{color:var(--orange);}
+.breadcrumb a:hover,.breadcrumb a:focus-visible{color:var(--orange);}
 .breadcrumb span{color:var(--orange);}
-.page-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,7vw,88px);letter-spacing:2px;line-height:0.9;margin-bottom:16px;}
-.page-hero h1 em{color:var(--orange);font-style:normal;}
-.page-hero p{font-size:14px;color:var(--gray2);max-width:520px;line-height:1.8;}
-.hero-stats-row{display:flex;gap:40px;margin-top:36px;padding-top:28px;border-top:1px solid var(--border);}
-.hs-item .hs-n{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--orange);line-height:1;}
-.hs-item .hs-l{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-top:3px;}
+.page-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,7vw,88px);letter-spacing:2px;line-height:0.9;margin-bottom:16px;}
+.page-h1 em{color:var(--orange);font-style:normal;}
+.page-sub{font-size:14px;color:var(--gray2);max-width:520px;line-height:1.8;}
+.hero-stats{display:flex;gap:40px;margin-top:36px;padding-top:28px;border-top:1px solid var(--border);flex-wrap:wrap;}
+.hs-n{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--orange);line-height:1;}
+.hs-l{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-top:3px;}
 
 /* TOOLBAR */
-.toolbar{background:var(--black);border-bottom:1px solid var(--border);padding:18px 60px;position:sticky;top:64px;z-index:100;backdrop-filter:blur(8px);}
-.toolbar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
-.search-wrap{position:relative;flex:1;min-width:220px;max-width:360px;}
-.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;fill:var(--gray);}
+.toolbar{background:var(--black);border-bottom:1px solid var(--border);padding:16px 60px;position:sticky;top:64px;z-index:100;backdrop-filter:blur(8px);}
+.toolbar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;min-width:200px;max-width:340px;}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;fill:var(--gray);pointer-events:none;}
 .search-inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--white);font-family:'Montserrat',sans-serif;font-size:12px;padding:10px 12px 10px 38px;outline:none;transition:border-color 0.2s;}
 .search-inp:focus{border-color:var(--orange);}
 .search-inp::placeholder{color:var(--gray);}
-.filter-select{background:var(--card);border:1px solid var(--border);color:var(--gray2);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;padding:10px 14px;cursor:pointer;outline:none;transition:border-color 0.2s;appearance:none;min-width:130px;}
-.filter-select:focus{border-color:var(--orange);}
+.fsel{background:var(--card);border:1px solid var(--border);color:var(--gray2);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;padding:10px 14px;cursor:pointer;outline:none;transition:border-color 0.2s;appearance:none;min-width:120px;}
+.fsel:focus{border-color:var(--orange);}
 .view-btns{display:flex;gap:4px;margin-left:auto;}
-.vbtn{background:var(--card);border:1px solid var(--border);color:var(--gray);padding:10px 13px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;}
-.vbtn.active,.vbtn:hover{background:var(--orange);border-color:var(--orange);color:#fff;}
+.vbtn{background:var(--card);border:1px solid var(--border);color:var(--gray);padding:10px 12px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;}
+.vbtn[aria-pressed="true"],.vbtn:hover{background:var(--orange);border-color:var(--orange);color:#fff;}
 .vbtn svg{width:16px;height:16px;fill:currentColor;}
-.results-count{font-size:11px;color:var(--gray);letter-spacing:2px;white-space:nowrap;}
+.res-count{font-size:11px;color:var(--gray);letter-spacing:2px;white-space:nowrap;}
 
-/* GRID VIEW */
-.collection-wrap{max-width:1400px;margin:0 auto;padding:40px 60px 80px;}
-.c-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}
+/* GRID */
+.coll-wrap{max-width:1400px;margin:0 auto;padding:40px 60px 80px;}
+.c-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;}
 .c-grid.list-view{grid-template-columns:1fr;}
 
-/* GRID CARD */
-.disc-card{background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;}
-.disc-card:hover{border-color:var(--orange);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.55),0 0 24px rgba(255,107,0,0.1);}
+/* DISC CARD */
+.disc{background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all 0.3s;position:relative;}
+.disc:hover{border-color:var(--orange);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,0.5),0 0 20px rgba(255,107,0,0.1);}
+.disc:focus-visible{border-color:var(--orange);outline:3px solid var(--orange);outline-offset:2px;transform:translateY(-3px);}
 .disc-cover{position:relative;width:100%;padding-bottom:100%;background:#0d0d0d;overflow:hidden;}
 .disc-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
-.disc-card:hover .disc-cover img{transform:scale(1.06);}
-.disc-cover-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
-.placeholder-vinyl{width:80px;height:80px;border-radius:50%;background:conic-gradient(#1a1a1a 0deg,#252525 3deg,#1a1a1a 6deg,#222 9deg,#1a1a1a 12deg);position:relative;}
-.placeholder-vinyl::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#FF8C30,var(--red));}
-.disc-cover-overlay{position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background 0.3s;}
-.disc-card:hover .disc-cover-overlay{background:rgba(0,0,0,0.5);}
+.disc:hover .disc-cover img,.disc:focus-visible .disc-cover img{transform:scale(1.05);}
+.disc-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.disc-ph-vinyl{width:75px;height:75px;border-radius:50%;background:conic-gradient(#1a1a1a 0deg,#252525 3deg,#1a1a1a 6deg,#222 9deg,#1a1a1a 12deg);position:relative;}
+.disc-ph-vinyl::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,#FF8C30,var(--red));}
+.disc-overlay{position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background 0.3s;}
+.disc:hover .disc-overlay,.disc:focus-visible .disc-overlay{background:rgba(0,0,0,0.5);}
 .disc-zoom{width:48px;height:48px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.7);transition:all 0.3s;}
-.disc-card:hover .disc-zoom{opacity:1;transform:scale(1);}
+.disc:hover .disc-zoom,.disc:focus-visible .disc-zoom{opacity:1;transform:scale(1);}
 .disc-zoom svg{width:20px;height:20px;fill:#fff;}
-.disc-format-badge{position:absolute;top:10px;left:10px;background:rgba(10,10,10,0.88);border:1px solid var(--border);font-size:9px;font-weight:700;letter-spacing:2px;padding:3px 8px;color:var(--gray2);backdrop-filter:blur(4px);}
-.disc-info{padding:14px 16px;}
-.disc-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;line-height:1.15;margin-bottom:4px;color:var(--white);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.disc-artist{font-size:12px;font-weight:600;color:var(--orange);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.disc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.disc-year{font-size:11px;color:var(--gray);font-weight:600;}
-.disc-label-txt{font-size:10px;color:var(--gray);letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.disc-rating{display:flex;align-items:center;gap:3px;margin-top:6px;}
-.star{font-size:10px;color:#333;}
-.star.on{color:#FFB300;}
+.disc-fmt{position:absolute;top:8px;left:8px;background:rgba(10,10,10,0.88);border:1px solid var(--border);font-size:9px;font-weight:700;letter-spacing:2px;padding:3px 7px;color:var(--gray2);}
+.disc-info{padding:13px 15px;}
+.disc-artist{font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.disc-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;line-height:1.2;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.disc-year{font-size:11px;color:var(--gray);}
 
 /* LIST VIEW */
-.c-grid.list-view .disc-card{display:grid;grid-template-columns:80px 1fr;gap:0;}
-.c-grid.list-view .disc-cover{padding-bottom:0;height:80px;width:80px;}
-.c-grid.list-view .disc-cover img{position:relative;inset:auto;width:80px;height:80px;}
-.c-grid.list-view .disc-cover-overlay{display:none;}
-.c-grid.list-view .disc-info{padding:12px 16px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
-.c-grid.list-view .disc-title{font-size:20px;margin-bottom:0;-webkit-line-clamp:1;}
-.c-grid.list-view .disc-artist{margin-bottom:0;min-width:140px;}
-.c-grid.list-view .disc-meta{margin-left:auto;}
-.c-grid.list-view .disc-rating{margin-top:0;}
-.c-grid.list-view .disc-format-badge{top:6px;left:6px;}
+.c-grid.list-view .disc{display:grid;grid-template-columns:72px 1fr;gap:0;}
+.c-grid.list-view .disc-cover{padding-bottom:0;height:72px;width:72px;}
+.c-grid.list-view .disc-cover img{position:relative;inset:auto;width:72px;height:72px;}
+.c-grid.list-view .disc-overlay{display:none;}
+.c-grid.list-view .disc-info{padding:10px 14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.c-grid.list-view .disc-title{font-size:18px;margin-bottom:0;-webkit-line-clamp:1;}
+.c-grid.list-view .disc-artist{margin-bottom:0;min-width:130px;}
+.c-grid.list-view .disc-year{margin-left:auto;}
 
-/* SKELETON */
+/* SKELETONS */
 .skel{background:var(--card);border:1px solid var(--border);animation:pulse 1.5s infinite;}
-.skel-cover{width:100%;padding-bottom:100%;background:#181818;}
-.skel-info{padding:14px 16px;}
-.skel-line{height:12px;background:#1e1e1e;border-radius:2px;margin-bottom:10px;}
+.skel-sq{width:100%;padding-bottom:100%;background:#181818;}
+.skel-body{padding:13px 15px;}
+.skel-line{height:11px;background:#1e1e1e;border-radius:2px;margin-bottom:9px;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.55}}
 
 /* PAGINATION */
-.pagination{display:flex;align-items:center;justify-content:center;gap:8px;padding:48px 0 24px;}
-.pg-btn{background:var(--card);border:1px solid var(--border);color:var(--gray2);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;padding:10px 16px;cursor:pointer;transition:all 0.2s;min-width:44px;text-align:center;}
-.pg-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange);}
-.pg-btn.active{background:var(--orange);border-color:var(--orange);color:#fff;}
-.pg-btn:disabled{opacity:0.3;cursor:not-allowed;}
-.pg-info{font-size:11px;color:var(--gray);letter-spacing:2px;}
+.pgbar{display:flex;align-items:center;justify-content:center;gap:8px;padding:48px 0 20px;flex-wrap:wrap;}
+.pgbtn{background:var(--card);border:1px solid var(--border);color:var(--gray2);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;padding:9px 15px;cursor:pointer;transition:all 0.2s;min-width:42px;text-align:center;}
+.pgbtn:hover:not(:disabled),.pgbtn:focus-visible:not(:disabled){border-color:var(--orange);color:var(--orange);}
+.pgbtn[aria-current="page"]{background:var(--orange);border-color:var(--orange);color:#fff;}
+.pgbtn:disabled{opacity:0.3;cursor:not-allowed;}
 
 /* MODAL */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.3s;overflow-y:auto;}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:9000;display:flex;align-items:flex-start;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.3s;overflow-y:auto;}
 .modal.on{opacity:1;pointer-events:all;}
-.modal-box{width:100%;max-width:960px;background:var(--card);border:1px solid var(--border);position:relative;animation:modalIn 0.3s ease both;}
-@keyframes modalIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.modal-x{position:absolute;top:16px;right:16px;background:rgba(0,0,0,0.6);border:1px solid var(--border);color:var(--gray);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:6px 12px;cursor:pointer;transition:all 0.2s;z-index:10;}
-.modal-x:hover{border-color:var(--orange);color:var(--orange);}
-.modal-grid{display:grid;grid-template-columns:320px 1fr;gap:0;}
-.modal-cover{width:320px;height:320px;background:#0d0d0d;flex-shrink:0;position:relative;overflow:hidden;}
-.modal-cover img{width:100%;height:100%;object-fit:cover;}
-.modal-cover-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#111;}
-.modal-cover-vinyl{width:180px;height:180px;border-radius:50%;background:conic-gradient(#1a1a1a 0deg,#252525 3deg,#1a1a1a 6deg,#222 9deg,#1a1a1a 12deg);position:relative;animation:spin 12s linear infinite;}
-.modal-cover-vinyl::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:50px;height:50px;border-radius:50%;background:radial-gradient(circle,#FF8C30,var(--red));}
+.modal-box{width:100%;max-width:980px;background:var(--card);border:1px solid var(--border);position:relative;margin:auto;animation:mIn 0.3s ease both;}
+@keyframes mIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.modal-x{position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.6);border:1px solid var(--border);color:var(--gray);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:6px 12px;cursor:pointer;transition:all 0.2s;z-index:10;}
+.modal-x:hover,.modal-x:focus-visible{border-color:var(--orange);color:var(--orange);}
+
+/* MODAL LAYOUT */
+.modal-top{display:grid;grid-template-columns:300px 1fr;gap:0;}
+.modal-cover-wrap{position:relative;width:300px;flex-shrink:0;}
+.modal-cover-wrap img{width:300px;height:300px;object-fit:cover;display:block;}
+.modal-cover-ph{width:300px;height:300px;background:#111;display:flex;align-items:center;justify-content:center;}
+.mcv{width:160px;height:160px;border-radius:50%;background:conic-gradient(#1a1a1a 0deg,#252525 3deg,#1a1a1a 6deg,#222 9deg,#1a1a1a 12deg);position:relative;animation:spin 12s linear infinite;}
+.mcv::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:radial-gradient(circle,#FF8C30,var(--red));}
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-.modal-body{padding:32px;overflow-y:auto;max-height:560px;}
-.modal-artist{font-size:13px;font-weight:700;color:var(--orange);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}
-.modal-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,44px);letter-spacing:1px;line-height:1;margin-bottom:16px;}
-.modal-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
-.mtag{background:var(--odim);border:1px solid rgba(255,107,0,0.2);color:var(--orange);font-size:10px;font-weight:700;letter-spacing:2px;padding:4px 10px;}
-.mtag.dark{background:rgba(255,255,255,0.04);border-color:var(--border);color:var(--gray2);}
-.modal-divider{border:none;border-top:1px solid var(--border);margin:18px 0;}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;margin-bottom:18px;}
-.info-item .ii-label{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:3px;}
-.info-item .ii-val{font-size:13px;color:var(--gray2);line-height:1.5;}
-.info-item .ii-val a{color:var(--orange);text-decoration:none;}
-.tracklist-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:12px;}
-.track-row{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
-.track-row:last-child{border-bottom:none;}
-.track-pos{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gray);min-width:26px;}
-.track-title{font-size:12px;color:var(--gray2);flex:1;line-height:1.4;}
-.track-dur{font-size:11px;color:var(--gray);font-weight:600;white-space:nowrap;}
-.modal-footer{padding:16px 32px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;background:rgba(0,0,0,0.2);}
-.discogs-link{display:inline-flex;align-items:center;gap:8px;background:var(--orange);color:#fff;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:2px;padding:10px 20px;transition:all 0.2s;}
-.discogs-link:hover{background:#ff8533;box-shadow:0 0 20px rgba(255,107,0,0.4);}
-.notes-section{margin-top:14px;}
-.notes-section p{font-size:12px;color:var(--gray);line-height:1.7;}
+.modal-header{padding:28px 28px 20px;}
+.m-artist{font-size:12px;font-weight:700;color:var(--orange);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;}
+.m-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,4vw,40px);letter-spacing:1px;line-height:1;margin-bottom:14px;}
+.m-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:0;}
+.mtag{background:var(--odim);border:1px solid rgba(255,107,0,0.2);color:var(--orange);font-size:9px;font-weight:700;letter-spacing:2px;padding:3px 9px;}
+.mtag.dk{background:rgba(255,255,255,0.04);border-color:var(--border);color:var(--gray2);}
 
-/* EMPTY STATE */
-.empty-state{text-align:center;padding:100px 40px;}
-.empty-state .es-ico{font-size:56px;margin-bottom:20px;}
-.empty-state h3{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;margin-bottom:12px;}
-.empty-state p{font-size:14px;color:var(--gray);line-height:1.8;max-width:400px;margin:0 auto;}
+/* CONDITION BADGE */
+.condition-wrap{padding:16px 28px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.cond-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gray);}
+.cond-badge{font-size:11px;font-weight:700;letter-spacing:2px;padding:5px 12px;border:1px solid;}
+.cond-M{color:#22c55e;border-color:#22c55e;background:rgba(34,197,94,0.1);}
+.cond-NM{color:#86efac;border-color:#86efac;background:rgba(134,239,172,0.1);}
+.cond-VG{color:#FFB300;border-color:#FFB300;background:rgba(255,179,0,0.1);}
+.cond-G{color:var(--orange);border-color:var(--orange);background:var(--odim);}
+.cond-F,.cond-P{color:#f87171;border-color:#f87171;background:rgba(248,113,113,0.1);}
+.cond-unknown{color:var(--gray);border-color:var(--border);background:rgba(255,255,255,0.04);}
+.cond-notes{font-size:12px;color:var(--gray2);}
 
-/* ERROR STATE */
-.err-state{background:rgba(200,16,46,0.07);border:1px solid rgba(200,16,46,0.2);padding:24px 28px;margin:40px 0;}
-.err-state p{font-size:13px;color:#ff8888;line-height:1.7;}
-.err-state code{font-size:11px;background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:2px;color:#ffaaaa;}
+/* INFO GRID */
+.modal-body{padding:20px 28px;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin-bottom:16px;}
+.ii-label{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:3px;}
+.ii-val{font-size:13px;color:var(--gray2);line-height:1.5;}
+.ii-val a{color:var(--orange);text-decoration:none;}
+.ii-val a:hover,.ii-val a:focus-visible{text-decoration:underline;}
+.mdivider{border:none;border-top:1px solid var(--border);margin:14px 0;}
+
+/* TRACKLIST */
+.tl-head{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:10px;}
+.track{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.track:last-child{border-bottom:none;}
+.track-pos{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gray);min-width:26px;flex-shrink:0;}
+.track-name{font-size:12px;color:var(--gray2);flex:1;line-height:1.4;}
+.track-dur{font-size:11px;color:var(--gray);font-weight:600;white-space:nowrap;flex-shrink:0;}
+.tl-more{font-size:11px;color:var(--gray);padding:8px 0;letter-spacing:2px;}
+
+/* MODAL FOOTER */
+.modal-foot{padding:14px 28px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:rgba(0,0,0,0.2);}
+.disc-link{display:inline-flex;align-items:center;gap:8px;background:var(--orange);color:#fff;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:2px;padding:10px 18px;transition:all 0.2s;}
+.disc-link:hover,.disc-link:focus-visible{background:#ff8533;box-shadow:0 0 20px rgba(255,107,0,0.4);}
+.m-id{font-size:11px;color:var(--gray);letter-spacing:1px;}
+
+/* ERR / EMPTY */
+.err-box{background:rgba(200,16,46,0.07);border:1px solid rgba(200,16,46,0.2);padding:22px 26px;margin:32px 0;}
+.err-box p{font-size:13px;color:#ff8888;line-height:1.7;}
+.err-box code{font-size:11px;background:rgba(0,0,0,0.3);padding:2px 6px;color:#ffaaaa;}
+.empty-st{text-align:center;padding:80px 32px;color:var(--gray);}
+.empty-st .ei{font-size:52px;margin-bottom:18px;}
 
 /* FOOTER */
 footer{background:var(--black);border-top:1px solid var(--border);padding:48px 40px 32px;text-align:center;}
@@ -172,22 +193,23 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
 .foot-logo span{color:var(--orange);}
 .foot-tag{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gray);margin-bottom:24px;}
 .foot-links{display:flex;justify-content:center;gap:24px;list-style:none;margin-bottom:28px;flex-wrap:wrap;}
-.foot-links a{color:var(--gray);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;transition:color 0.2s;}
-.foot-links a:hover{color:var(--orange);}
+.foot-links a{color:var(--gray);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;transition:color 0.2s;padding:4px;}
+.foot-links a:hover,.foot-links a:focus-visible{color:var(--orange);}
 .foot-copy{font-size:11px;color:#333;letter-spacing:1px;}
 
 /* RESPONSIVE */
 @media(max-width:900px){
   nav{padding:0 20px;}
   .nav-links{display:none;}
+  .menu-btn{display:flex;}
   .page-hero{padding:100px 24px 40px;}
-  .toolbar{padding:14px 24px;}
-  .collection-wrap{padding:24px 24px 60px;}
-  .c-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;}
-  .modal-grid{grid-template-columns:1fr;}
-  .modal-cover{width:100%;height:260px;}
+  .toolbar{padding:12px 24px;}
+  .coll-wrap{padding:24px 24px 56px;}
+  .c-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  .modal-top{grid-template-columns:1fr;}
+  .modal-cover-wrap img,.modal-cover-ph{width:100%;height:220px;}
   .info-grid{grid-template-columns:1fr;}
-  .hero-stats-row{gap:24px;}
+  footer{padding:36px 24px 24px;}
 }
 @media(max-width:480px){
   .c-grid{grid-template-columns:repeat(2,1fr);}
@@ -195,459 +217,461 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
 <!-- NAV -->
-<nav>
-  <a href="index.html" class="nav-logo">
-    <div class="pua"></div>
-    <div class="nav-title">METIENDO <span>PÚA</span></div>
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="index.html" class="nav-logo" aria-label="Metiendo Púa - Inicio">
+    <div class="pua" aria-hidden="true"></div>
+    <span class="nav-brand">METIENDO <span>PÚA</span></span>
   </a>
-  <ul class="nav-links">
-    <li><a href="index.html#videos" data-i18n="nav.videos">Videos</a></li>
-    <li><a href="coleccion.html" class="active" data-i18n="nav.col">Colección</a></li>
-    <li><a href="index.html#asistente" data-i18n="nav.ai">Asistente IA</a></li>
-    <li><a href="index.html#sobre" data-i18n="nav.about">Nosotros</a></li>
-    <li><a href="https://youtube.com/@metiendopuauy" target="_blank">Canal ↗</a></li>
+  <ul class="nav-links" role="list">
+    <li><a href="index.html#videos">Videos</a></li>
+    <li><a href="coleccion.html" aria-current="page">Colección</a></li>
+    <li><a href="index.html#buscador">Buscador Musical</a></li>
+    <li><a href="index.html#sobre">Nosotros</a></li>
+    <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal ↗</a></li>
   </ul>
-  <div class="lang-wrap">
-    <button class="lbtn active" onclick="setLang('es')">ES</button>
-    <button class="lbtn" onclick="setLang('en')">EN</button>
+  <div class="nav-right">
+    <div class="lang-group" role="group" aria-label="Idioma">
+      <button class="lbtn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
+      <button class="lbtn" aria-pressed="false" onclick="setLang('en')" lang="en">EN</button>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    </button>
   </div>
 </nav>
 
+<nav id="mobileNav" class="mobile-nav" aria-label="Menú móvil" aria-hidden="true">
+  <a href="index.html#videos" onclick="closeMenu()">Videos</a>
+  <a href="coleccion.html" aria-current="page" onclick="closeMenu()">Colección</a>
+  <a href="index.html#buscador" onclick="closeMenu()">Buscador Musical</a>
+  <a href="index.html#sobre" onclick="closeMenu()">Nosotros</a>
+  <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal YouTube ↗</a>
+  <div class="mobile-nav-footer">
+    <button class="lbtn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
+    <button class="lbtn" aria-pressed="false" onclick="setLang('en')" lang="en">EN</button>
+  </div>
+</nav>
+
+<main id="main-content">
+
 <!-- PAGE HERO -->
-<div class="page-hero">
+<header class="page-hero" role="banner">
   <div class="page-hero-inner">
-    <div class="breadcrumb">
+    <nav class="breadcrumb" aria-label="Ubicación en el sitio">
       <a href="index.html">Metiendo Púa</a>
-      <span>›</span>
-      <span data-i18n="bc">Colección</span>
-    </div>
-    <h1><em data-i18n="h1a">MI</em> <span data-i18n="h1b">COLECCIÓN</span></h1>
-    <p data-i18n="hero.sub">Vinilos y CDs de la colección personal. Cada disco con sus datos completos directo desde Discogs.</p>
-    <div class="hero-stats-row" id="heroStats">
-      <div class="hs-item"><div class="hs-n" id="statTotal">—</div><div class="hs-l" data-i18n="stat.total">Discos</div></div>
-      <div class="hs-item"><div class="hs-n" id="statPages">—</div><div class="hs-l" data-i18n="stat.pages">Páginas</div></div>
-      <div class="hs-item"><div class="hs-n" id="statUser">—</div><div class="hs-l" data-i18n="stat.user">Usuario Discogs</div></div>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page" data-i18n="bc">Colección</span>
+    </nav>
+    <h1 class="page-h1"><em data-i18n="h1a">MI</em> <span data-i18n="h1b">COLECCIÓN</span></h1>
+    <p class="page-sub" data-i18n="hero.sub">Vinilos y CDs de la colección personal. Portadas, tracklist, estado del disco y datos completos desde Discogs.</p>
+    <div class="hero-stats" aria-label="Estadísticas de la colección">
+      <div><div class="hs-n" id="statTotal" aria-live="polite">—</div><div class="hs-l" data-i18n="stat.total">Discos</div></div>
+      <div><div class="hs-n" id="statPages" aria-live="polite">—</div><div class="hs-l" data-i18n="stat.pages">Páginas</div></div>
+      <div><div class="hs-n" id="statUser" aria-live="polite">—</div><div class="hs-l" data-i18n="stat.user">Usuario Discogs</div></div>
     </div>
   </div>
-</div>
+</header>
 
 <!-- TOOLBAR -->
-<div class="toolbar">
+<div class="toolbar" role="search" aria-label="Filtros de la colección">
   <div class="toolbar-inner">
     <div class="search-wrap">
-      <svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-      <input type="text" class="search-inp" id="searchInp" placeholder="Buscar en la colección..." oninput="filterLocal()" data-i18n-ph="search.ph"/>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <label for="searchInp" class="sr-only" data-i18n="search.label">Buscar en la colección</label>
+      <input type="search" id="searchInp" class="search-inp" placeholder="Buscar artista o título..." oninput="filterLocal()" aria-label="Buscar en la colección"/>
     </div>
-    <select class="filter-select" id="sortSel" onchange="changeSort()" title="Ordenar">
+    <label for="sortSel" class="sr-only">Ordenar</label>
+    <select id="sortSel" class="fsel" onchange="changeSort()" aria-label="Ordenar colección">
       <option value="added-desc" data-i18n="sort.new">Más recientes</option>
       <option value="added-asc" data-i18n="sort.old">Más antiguos</option>
       <option value="artist-asc" data-i18n="sort.az">Artista A→Z</option>
       <option value="year-asc" data-i18n="sort.year">Año ↑</option>
       <option value="year-desc" data-i18n="sort.yeard">Año ↓</option>
     </select>
-    <select class="filter-select" id="formatSel" onchange="filterLocal()" title="Formato" style="min-width:110px;">
+    <label for="fmtSel" class="sr-only">Formato</label>
+    <select id="fmtSel" class="fsel" onchange="filterLocal()" aria-label="Filtrar por formato" style="min-width:110px;">
       <option value="" data-i18n="fmt.all">Todos</option>
       <option value="Vinyl">Vinilo</option>
       <option value="CD">CD</option>
       <option value="Cassette">Cassette</option>
     </select>
-    <span class="results-count" id="resCount"></span>
-    <div class="view-btns">
-      <button class="vbtn active" id="btnGrid" onclick="setView('grid')" title="Grilla">
-        <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z"/></svg>
+    <span class="res-count" id="resCount" aria-live="polite" aria-atomic="true"></span>
+    <div class="view-btns" role="group" aria-label="Modo de vista">
+      <button class="vbtn" id="btnGrid" aria-pressed="true" onclick="setView('grid')" aria-label="Vista en grilla">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z"/></svg>
       </button>
-      <button class="vbtn" id="btnList" onclick="setView('list')" title="Lista">
-        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <button class="vbtn" id="btnList" aria-pressed="false" onclick="setView('list')" aria-label="Vista en lista">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
       </button>
     </div>
   </div>
 </div>
 
 <!-- COLLECTION -->
-<div class="collection-wrap">
-  <div class="c-grid" id="cGrid">
-    <!-- Skeletons -->
-    <div class="skel"><div class="skel-cover"></div><div class="skel-info"><div class="skel-line" style="width:70%"></div><div class="skel-line" style="width:50%"></div></div></div>
-    <div class="skel"><div class="skel-cover"></div><div class="skel-info"><div class="skel-line" style="width:60%"></div><div class="skel-line" style="width:45%"></div></div></div>
-    <div class="skel"><div class="skel-cover"></div><div class="skel-info"><div class="skel-line" style="width:75%"></div><div class="skel-line" style="width:55%"></div></div></div>
-    <div class="skel"><div class="skel-cover"></div><div class="skel-info"><div class="skel-line" style="width:65%"></div><div class="skel-line" style="width:40%"></div></div></div>
-    <div class="skel"><div class="skel-cover"></div><div class="skel-info"><div class="skel-line" style="width:80%"></div><div class="skel-line" style="width:60%"></div></div></div>
-    <div class="skel"><div class="skel-cover"></div><div class="skel-info"><div class="skel-line" style="width:55%"></div><div class="skel-line" style="width:50%"></div></div></div>
-  </div>
-  <div class="pagination" id="pgBar" style="display:none;"></div>
+<div class="coll-wrap">
+  <div class="c-grid" id="cGrid" role="list" aria-label="Colección de discos"></div>
+  <nav class="pgbar" id="pgBar" aria-label="Paginación" style="display:none;"></nav>
 </div>
 
-<!-- RELEASE MODAL -->
-<div class="modal" id="discModal" onclick="closeModal(event)">
-  <div class="modal-box" onclick="event.stopPropagation()">
-    <button class="modal-x" onclick="closeModal()">✕ CERRAR</button>
-    <div class="modal-grid">
-      <div class="modal-cover" id="mCover">
-        <div class="modal-cover-ph"><div class="modal-cover-vinyl"></div></div>
-      </div>
-      <div style="display:flex;flex-direction:column;overflow:hidden;">
-        <div class="modal-body" id="mBody">
-          <div style="text-align:center;padding:40px 0;color:var(--gray);">Cargando...</div>
-        </div>
-        <div class="modal-footer" id="mFooter"></div>
-      </div>
-    </div>
-  </div>
-</div>
+</main>
 
 <!-- FOOTER -->
-<footer>
-  <div class="foot-logo">METIENDO <span>PÚA</span></div>
-  <div class="foot-tag">70s · 80s · 90s Rock & Pop en Vinilo — Uruguay</div>
-  <ul class="foot-links">
+<footer role="contentinfo">
+  <p class="foot-logo" aria-label="Metiendo Púa">METIENDO <span>PÚA</span></p>
+  <p class="foot-tag">70s · 80s · 90s Rock & Pop en Vinilo — Uruguay</p>
+  <ul class="foot-links" role="list">
     <li><a href="index.html">Inicio</a></li>
     <li><a href="index.html#videos">Videos</a></li>
-    <li><a href="index.html#asistente">Asistente IA</a></li>
-    <li><a href="https://youtube.com/@metiendopuauy" target="_blank">YouTube ↗</a></li>
-    <li><a href="https://www.discogs.com" target="_blank">Discogs ↗</a></li>
+    <li><a href="index.html#buscador">Buscador IA</a></li>
+    <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">YouTube ↗</a></li>
+    <li><a href="https://www.discogs.com" target="_blank" rel="noopener">Discogs ↗</a></li>
   </ul>
-  <div class="foot-copy">© 2025 Metiendo Púa — Uruguay</div>
+  <p class="foot-copy">© 2025 Metiendo Púa — Uruguay</p>
 </footer>
+
+<!-- DISC MODAL -->
+<div class="modal" id="discModal" role="dialog" aria-modal="true" aria-labelledby="mTitle" onclick="closeModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-x" onclick="closeModal()" aria-label="Cerrar detalle del disco">✕ CERRAR</button>
+    <div class="modal-top">
+      <div class="modal-cover-wrap" id="mCover">
+        <div class="modal-cover-ph"><div class="mcv" aria-hidden="true"></div></div>
+      </div>
+      <div>
+        <div class="modal-header" id="mHeader">
+          <p class="m-artist" id="mArtist"></p>
+          <h2 class="m-title" id="mTitle">Cargando...</h2>
+          <div class="m-tags" id="mTags" aria-label="Géneros y formato"></div>
+        </div>
+        <div class="condition-wrap" id="mCondition" aria-label="Estado del disco"></div>
+      </div>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+    <div class="modal-foot" id="mFoot"></div>
+  </div>
+</div>
 
 <script>
 // ===== I18N =====
-const T = {
+const T={
   es:{
-    'nav.videos':'Videos','nav.col':'Colección','nav.ai':'Asistente IA','nav.about':'Nosotros',
     'bc':'Colección','h1a':'MI','h1b':'COLECCIÓN',
-    'hero.sub':'Vinilos y CDs de la colección personal. Cada disco con sus datos completos directo desde Discogs.',
+    'hero.sub':'Vinilos y CDs de la colección personal. Portadas, tracklist, estado del disco y datos completos desde Discogs.',
     'stat.total':'Discos','stat.pages':'Páginas','stat.user':'Usuario Discogs',
-    'search.ph':'Buscar en la colección...',
+    'search.label':'Buscar en la colección',
     'sort.new':'Más recientes','sort.old':'Más antiguos','sort.az':'Artista A→Z','sort.year':'Año ↑','sort.yeard':'Año ↓',
     'fmt.all':'Todos los formatos',
-    'results':'discos encontrados','of':'de',
-    'tracklist':'TRACKLIST','details':'DETALLES',
+    'found':'discos encontrados',
+    'tracklist':'TRACKLIST','details':'DETALLES','condition':'ESTADO DEL DISCO',
     'open.discogs':'Ver en Discogs ↗',
-    'err.notoken':'Falta configurar DISCOGS_TOKEN en las variables de entorno de Netlify.',
-    'err.generic':'Error al cargar la colección. Intentá de nuevo.',
-    'empty':'No se encontraron discos con ese filtro.',
-    'loading.detail':'Cargando detalles del disco...',
+    'loading':'Cargando detalles...','err.token':'Falta DISCOGS_TOKEN en las variables de entorno de Vercel.',
+    'err.generic':'Error al cargar la colección.',
+    'empty':'No hay discos con ese filtro.',
+    'cond.M':'Mint — Perfecto, nunca usado','cond.NM':'Near Mint — Como nuevo',
+    'cond.VGP':'Very Good Plus — Muy buena condición','cond.VG':'Very Good — Buena condición',
+    'cond.GP':'Good Plus — Marcas visibles','cond.G':'Good — Muy usado',
+    'cond.F':'Fair — Deteriorado','cond.P':'Poor — Muy deteriorado',
+    'want':'quieren','have':'tienen','votes':'votos',
   },
   en:{
-    'nav.videos':'Videos','nav.col':'Collection','nav.ai':'AI Assistant','nav.about':'About',
     'bc':'Collection','h1a':'MY','h1b':'COLLECTION',
-    'hero.sub':'Personal vinyl and CD collection. Every record with complete data straight from Discogs.',
+    'hero.sub':'Personal vinyl and CD collection. Covers, tracklist, record condition and full data from Discogs.',
     'stat.total':'Records','stat.pages':'Pages','stat.user':'Discogs User',
-    'search.ph':'Search the collection...',
+    'search.label':'Search the collection',
     'sort.new':'Most recent','sort.old':'Oldest first','sort.az':'Artist A→Z','sort.year':'Year ↑','sort.yeard':'Year ↓',
     'fmt.all':'All formats',
-    'results':'records found','of':'of',
-    'tracklist':'TRACKLIST','details':'DETAILS',
+    'found':'records found',
+    'tracklist':'TRACKLIST','details':'DETAILS','condition':'RECORD CONDITION',
     'open.discogs':'View on Discogs ↗',
-    'err.notoken':'DISCOGS_TOKEN not configured in Netlify environment variables.',
-    'err.generic':'Error loading collection. Please try again.',
-    'empty':'No records found with that filter.',
-    'loading.detail':'Loading record details...',
+    'loading':'Loading details...','err.token':'Missing DISCOGS_TOKEN in Vercel environment variables.',
+    'err.generic':'Error loading collection.',
+    'empty':'No records match that filter.',
+    'cond.M':'Mint — Perfect, never played','cond.NM':'Near Mint — Like new',
+    'cond.VGP':'Very Good Plus — Very good condition','cond.VG':'Very Good — Good condition',
+    'cond.GP':'Good Plus — Visible marks','cond.G':'Good — Heavily used',
+    'cond.F':'Fair — Deteriorated','cond.P':'Poor — Very deteriorated',
+    'want':'want','have':'have','votes':'votes',
   }
 };
 let lang='es';
 function setLang(l){
   lang=l;
-  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('active'));
-  document.querySelector(`.lbtn[onclick="setLang('${l}')"]`).classList.add('active');
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const k=el.getAttribute('data-i18n');
-    if(T[l][k])el.textContent=T[l][k];
-  });
-  document.getElementById('searchInp').placeholder=T[l]['search.ph'];
-  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
-    const k=el.getAttribute('data-i18n-ph');
-    if(T[l][k])el.placeholder=T[l][k];
-  });
+  document.documentElement.lang=l;
+  document.querySelectorAll('.lbtn').forEach(b=>{b.setAttribute('aria-pressed',b.getAttribute('onclick').includes(`'${l}'`)?'true':'false');});
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(T[l]&&T[l][k])el.textContent=T[l][k];});
+  document.getElementById('searchInp').placeholder=l==='es'?'Buscar artista o título...':'Search artist or title...';
   updateCount();
 }
 
+// ===== MOBILE MENU =====
+const menuBtn=document.getElementById('menuBtn');
+const mobileNav=document.getElementById('mobileNav');
+menuBtn.addEventListener('click',()=>{
+  const open=mobileNav.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded',String(open));
+  mobileNav.setAttribute('aria-hidden',String(!open));
+  menuBtn.setAttribute('aria-label',open?'Cerrar menú':'Abrir menú');
+  if(open) mobileNav.querySelector('a').focus();
+});
+function closeMenu(){mobileNav.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');mobileNav.setAttribute('aria-hidden','true');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu();closeModal();}});
+
+// ===== CONDITION HELPERS =====
+const COND_MAP={
+  'Mint':'M','Near Mint (NM or M-)':'NM','Very Good Plus (VG+)':'VGP',
+  'Very Good (VG)':'VG','Good Plus (G+)':'GP','Good (G)':'G',
+  'Fair (F)':'F','Poor (P)':'P'
+};
+function condClass(raw){
+  const k=COND_MAP[raw]||'unknown';
+  return {cls:'cond-'+(k==='VGP'?'VG':k==='GP'?'G':k),key:k,label:raw||'—'};
+}
+
 // ===== STATE =====
-let allItems=[]; // current page items
-let filteredItems=[];
-let currentPage=1;
-let totalPages=1;
-let totalItems=0;
-let viewMode='grid';
-let sortVal='added-desc';
+let allItems=[],filteredItems=[],currentPage=1,totalPages=1,totalItems=0,viewMode='grid',sortVal='added-desc';
 
 // ===== API =====
 async function apiFetch(params){
   const qs=new URLSearchParams(params).toString();
   const r=await fetch(`/api/discogs?${qs}`);
-  if(!r.ok){
-    const e=await r.json().catch(()=>({}));
-    throw new Error(e.error||`HTTP ${r.status}`);
-  }
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error||`HTTP ${r.status}`);}
   return r.json();
 }
 
-// ===== LOAD COLLECTION =====
+// ===== LOAD =====
 async function loadCollection(page=1){
   currentPage=page;
   const grid=document.getElementById('cGrid');
   showSkeletons(grid);
-
-  const [sortField,sortOrder]=sortVal.split('-');
-
-  try {
-    const data=await apiFetch({action:'collection',page,per_page:24,sort:sortField,sort_order:sortOrder});
-
+  const [sf,so]=sortVal.split('-');
+  try{
+    const data=await apiFetch({action:'collection',page,per_page:24,sort:sf,sort_order:so});
     totalItems=data.pagination?.items||0;
     totalPages=data.pagination?.pages||1;
-    allItems=(data.releases||[]);
+    allItems=data.releases||[];
     filteredItems=[...allItems];
-
-    // Update hero stats
     document.getElementById('statTotal').textContent=totalItems.toLocaleString();
     document.getElementById('statPages').textContent=totalPages;
     document.getElementById('statUser').textContent=data.username||'—';
-
-    applyLocalFilter();
+    applyFilter();
     renderPagination();
-
-  } catch(err){
-    console.error(err);
-    const isToken=err.message.includes('token')||err.message.includes('401')||err.message.includes('DISCOGS_TOKEN');
-    grid.innerHTML=`
-      <div style="grid-column:1/-1;">
-        <div class="err-state">
-          <p>⚠️ ${isToken?T[lang]['err.notoken']:T[lang]['err.generic']}</p>
-          ${isToken?`<p style="margin-top:10px;font-size:12px;">Configurá la variable <code>DISCOGS_TOKEN</code> en Netlify → Site settings → Environment variables.</p>`:''}
-        </div>
-      </div>`;
+  }catch(err){
+    const isToken=err.message.includes('token')||err.message.includes('401')||err.message.includes('DISCOGS');
+    grid.innerHTML=`<div style="grid-column:1/-1;"><div class="err-box" role="alert"><p>⚠️ ${isToken?T[lang]['err.token']:T[lang]['err.generic']}</p>${isToken?`<p style="margin-top:8px;font-size:12px;">Agregá <code>DISCOGS_TOKEN</code> en Vercel → Project Settings → Environment Variables.</p>`:''}</div></div>`;
   }
 }
 
 function showSkeletons(grid){
-  grid.innerHTML=Array(12).fill(0).map(()=>`
-    <div class="skel"><div class="skel-cover"></div><div class="skel-info">
-      <div class="skel-line" style="width:${55+Math.random()*30|0}%"></div>
-      <div class="skel-line" style="width:${35+Math.random()*25|0}%"></div>
-    </div></div>`).join('');
+  grid.innerHTML=Array(12).fill(0).map(()=>`<div class="skel" aria-hidden="true"><div class="skel-sq"></div><div class="skel-body"><div class="skel-line" style="width:${55+Math.random()*30|0}%"></div><div class="skel-line" style="width:${35+Math.random()*20|0}%"></div></div></div>`).join('');
 }
 
-// ===== RENDER =====
-function applyLocalFilter(){
+function applyFilter(){
   const q=document.getElementById('searchInp').value.toLowerCase().trim();
-  const fmt=document.getElementById('formatSel').value;
-
+  const fmt=document.getElementById('fmtSel').value;
   filteredItems=allItems.filter(item=>{
     const info=item.basic_information||{};
     const title=(info.title||'').toLowerCase();
     const artist=(info.artists||[]).map(a=>a.name).join(' ').toLowerCase();
     const matchQ=!q||(title.includes(q)||artist.includes(q));
-    const formats=(info.formats||[]).map(f=>f.name||'');
-    const matchFmt=!fmt||formats.some(f=>f===fmt);
+    const fmts=(info.formats||[]).map(f=>f.name||'');
+    const matchFmt=!fmt||fmts.includes(fmt);
     return matchQ&&matchFmt;
   });
-
   renderGrid();
   updateCount();
 }
-
-function filterLocal(){applyLocalFilter();}
-
+function filterLocal(){applyFilter();}
 function updateCount(){
   const el=document.getElementById('resCount');
-  if(!el)return;
-  el.textContent=filteredItems.length<allItems.length
-    ?`${filteredItems.length} ${T[lang]['results']}`
-    :`${totalItems} ${T[lang]['results']}`;
+  if(el) el.textContent=`${filteredItems.length} ${T[lang]['found']}`;
 }
 
+// ===== RENDER GRID =====
 function renderGrid(){
   const grid=document.getElementById('cGrid');
-  if(filteredItems.length===0){
-    grid.innerHTML=`<div style="grid-column:1/-1;"><div class="empty-state"><div class="es-ico">🎵</div><h3>${T[lang]['empty']}</h3></div></div>`;
+  if(!filteredItems.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;"><div class="empty-st" role="status"><div class="ei">🎵</div><p>${T[lang]['empty']}</p></div></div>`;
     return;
   }
-
-  grid.innerHTML=filteredItems.map(item=>{
+  grid.innerHTML='';
+  filteredItems.forEach(item=>{
     const info=item.basic_information||{};
     const title=info.title||'Sin título';
-    const artists=(info.artists||[]).map(a=>a.name.replace(/\s*\(\d+\)$/,'')).join(', ')||'Desconocido';
+    const artist=(info.artists||[]).map(a=>a.name.replace(/\s*\(\d+\)$/,'')).join(', ')||'—';
     const year=info.year||'';
     const cover=info.cover_image||info.thumb||'';
-    const formats=(info.formats||[]).map(f=>f.name).filter(Boolean);
-    const fmtLabel=formats[0]||'';
-    const labelName=(info.labels||[]).map(l=>l.name).join(', ')||'';
-    const releaseId=info.id||item.id;
-    const rating=item.rating||0;
+    const fmtLabel=(info.formats||[])[0]?.name||'';
+    const rid=info.id||item.id;
+    const cond=item.notes||'';
 
-    return `
-    <div class="disc-card" onclick="openRelease(${releaseId},'${escStr(title)}','${escStr(artists)}',${JSON.stringify(cover)})">
+    const card=document.createElement('article');
+    card.className='disc';
+    card.setAttribute('role','listitem');
+    card.setAttribute('tabindex','0');
+    card.setAttribute('aria-label',`${artist} — ${title}${year?' ('+year+')':''}`);
+    card.innerHTML=`
       <div class="disc-cover">
-        ${cover
-          ?`<img src="${cover}" alt="${escStr(title)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'disc-cover-placeholder\\'><div class=\\'placeholder-vinyl\\'></div></div>'">`
-          :`<div class="disc-cover-placeholder"><div class="placeholder-vinyl"></div></div>`}
-        <div class="disc-cover-overlay">
-          <div class="disc-zoom"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        ${cover?`<img src="${cover}" alt="Portada de ${escStr(title)} por ${escStr(artist)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'disc-ph\\'><div class=\\'disc-ph-vinyl\\'></div></div>'">`:`<div class="disc-ph"><div class="disc-ph-vinyl" aria-hidden="true"></div></div>`}
+        <div class="disc-overlay" aria-hidden="true">
+          <div class="disc-zoom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
         </div>
-        ${fmtLabel?`<div class="disc-format-badge">${fmtLabel.toUpperCase()}</div>`:''}
+        ${fmtLabel?`<span class="disc-fmt" aria-hidden="true">${fmtLabel.toUpperCase()}</span>`:''}
       </div>
       <div class="disc-info">
-        <div class="disc-artist">${artists}</div>
-        <div class="disc-title">${title}</div>
-        <div class="disc-meta">
-          ${year?`<span class="disc-year">${year}</span>`:''}
-          ${labelName?`<span class="disc-label-txt">${labelName}</span>`:''}
-        </div>
-        ${rating?`<div class="disc-rating">${[1,2,3,4,5].map(s=>`<span class="star ${s<=rating?'on':''}">★</span>`).join('')}</div>`:''}
-      </div>
-    </div>`;
-  }).join('');
+        <p class="disc-artist">${artist}</p>
+        <h3 class="disc-title">${title}</h3>
+        <p class="disc-year">${year}</p>
+      </div>`;
+    card.onclick=()=>openRelease(rid,title,artist,cover);
+    card.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openRelease(rid,title,artist,cover);}};
+    grid.appendChild(card);
+  });
 }
+function escStr(s){return String(s).replace(/'/g,"\\'").replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
-function escStr(s){return String(s).replace(/'/g,"\\'").replace(/"/g,'&quot;');}
+// ===== SORT/VIEW =====
+function changeSort(){sortVal=document.getElementById('sortSel').value;loadCollection(1);}
+function setView(mode){
+  viewMode=mode;
+  document.getElementById('cGrid').classList.toggle('list-view',mode==='list');
+  document.getElementById('btnGrid').setAttribute('aria-pressed',String(mode==='grid'));
+  document.getElementById('btnList').setAttribute('aria-pressed',String(mode==='list'));
+}
 
 // ===== PAGINATION =====
 function renderPagination(){
   const bar=document.getElementById('pgBar');
   if(totalPages<=1){bar.style.display='none';return;}
   bar.style.display='flex';
-
-  let html='';
-  html+=`<button class="pg-btn" onclick="loadCollection(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
-
-  const range=pagRange(currentPage,totalPages);
+  const range=pgRange(currentPage,totalPages);
+  let html=`<button class="pgbtn" onclick="loadCollection(${currentPage-1})" ${currentPage===1?'disabled':''} aria-label="Página anterior">‹</button>`;
   range.forEach(p=>{
-    if(p==='…') html+=`<span class="pg-info">…</span>`;
-    else html+=`<button class="pg-btn ${p===currentPage?'active':''}" onclick="loadCollection(${p})">${p}</button>`;
+    if(p==='…') html+=`<span aria-hidden="true" style="color:var(--gray);padding:0 4px;">…</span>`;
+    else html+=`<button class="pgbtn" onclick="loadCollection(${p})" ${p===currentPage?'aria-current="page"':''} aria-label="Página ${p}">${p}</button>`;
   });
-
-  html+=`<button class="pg-btn" onclick="loadCollection(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+  html+=`<button class="pgbtn" onclick="loadCollection(${currentPage+1})" ${currentPage===totalPages?'disabled':''} aria-label="Página siguiente">›</button>`;
   bar.innerHTML=html;
-  bar.style.display='flex';
 }
-
-function pagRange(cur,total){
-  if(total<=7) return Array.from({length:total},(_,i)=>i+1);
-  if(cur<=4) return [1,2,3,4,5,'…',total];
-  if(cur>=total-3) return [1,'…',total-4,total-3,total-2,total-1,total];
-  return [1,'…',cur-1,cur,cur+1,'…',total];
-}
-
-// ===== SORT / FILTER =====
-function changeSort(){
-  sortVal=document.getElementById('sortSel').value;
-  loadCollection(1);
-}
-
-// ===== VIEW MODE =====
-function setView(mode){
-  viewMode=mode;
-  document.getElementById('cGrid').classList.toggle('list-view',mode==='list');
-  document.getElementById('btnGrid').classList.toggle('active',mode==='grid');
-  document.getElementById('btnList').classList.toggle('active',mode==='list');
+function pgRange(c,t){
+  if(t<=7) return Array.from({length:t},(_,i)=>i+1);
+  if(c<=4) return [1,2,3,4,5,'…',t];
+  if(c>=t-3) return [1,'…',t-4,t-3,t-2,t-1,t];
+  return [1,'…',c-1,c,c+1,'…',t];
 }
 
 // ===== RELEASE MODAL =====
-async function openRelease(id, title, artist, cover){
-  const modal=document.getElementById('discModal');
-  const mBody=document.getElementById('mBody');
+let lastFocus;
+async function openRelease(id,title,artist,cover){
+  lastFocus=document.activeElement;
+  // Reset modal
+  document.getElementById('mTitle').textContent=title||'Cargando...';
+  document.getElementById('mArtist').textContent=artist||'';
+  document.getElementById('mTags').innerHTML='';
+  document.getElementById('mCondition').innerHTML=`<span class="cond-label">${T[lang]['condition']}</span><span class="cond-badge cond-unknown" aria-label="Cargando estado">...</span>`;
+  document.getElementById('mBody').innerHTML=`<p style="padding:24px;color:var(--gray);font-size:12px;letter-spacing:2px;">${T[lang]['loading']}</p>`;
+  document.getElementById('mFoot').innerHTML='';
+  // Cover
   const mCover=document.getElementById('mCover');
-  const mFooter=document.getElementById('mFooter');
+  mCover.innerHTML=cover?`<img src="${cover}" alt="Portada de ${escStr(title)}" style="width:100%;height:300px;object-fit:cover;display:block;">`:`<div class="modal-cover-ph"><div class="mcv" aria-hidden="true"></div></div>`;
 
-  // Show modal immediately with cover and loading state
-  mCover.innerHTML=cover
-    ?`<img src="${cover}" alt="${title}" style="width:100%;height:100%;object-fit:cover;">`
-    :`<div class="modal-cover-ph"><div class="modal-cover-vinyl"></div></div>`;
-  mBody.innerHTML=`<div style="text-align:center;padding:60px 0;color:var(--gray);font-size:13px;letter-spacing:2px;">${T[lang]['loading.detail']}</div>`;
-  mFooter.innerHTML='';
+  const modal=document.getElementById('discModal');
   modal.classList.add('on');
   document.body.style.overflow='hidden';
+  document.querySelector('.modal-x').focus();
 
-  try {
-    const data=await apiFetch({action:'release',id});
-    renderModal(data);
-  } catch(err){
-    mBody.innerHTML=`<div style="padding:32px;color:#ff8888;font-size:13px;">Error: ${err.message}</div>`;
+  try{
+    const d=await apiFetch({action:'release',id});
+    renderModal(d);
+  }catch(err){
+    document.getElementById('mBody').innerHTML=`<div class="err-box" role="alert" style="margin:20px;"><p>Error: ${err.message}</p></div>`;
   }
 }
 
 function renderModal(d){
-  const mCover=document.getElementById('mCover');
-  const mBody=document.getElementById('mBody');
-  const mFooter=document.getElementById('mFooter');
-
-  // Cover — use highest quality image
+  // Cover — best quality
   const imgs=d.images||[];
   const primary=imgs.find(i=>i.type==='primary')||imgs[0];
   if(primary?.uri){
-    mCover.innerHTML=`<img src="${primary.uri}" alt="${d.title||''}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div class=\\'modal-cover-ph\\'><div class=\\'modal-cover-vinyl\\'></div></div>'">`;
+    document.getElementById('mCover').innerHTML=`<img src="${primary.uri}" alt="Portada de ${escStr(d.title||'')}" style="width:100%;height:300px;object-fit:cover;display:block;" onerror="this.parentElement.innerHTML='<div class=\\'modal-cover-ph\\'><div class=\\'mcv\\'></div></div>'">`;
   }
 
-  const artists=(d.artists||[]).map(a=>a.name.replace(/\s*\(\d+\)$/,'')).join(', ')||'';
-  const genres=(d.genres||[]);
-  const styles=(d.styles||[]);
-  const formats=(d.formats||[]);
-  const labels=(d.labels||[]);
-  const country=d.country||'';
+  document.getElementById('mArtist').textContent=(d.artists||[]).map(a=>a.name.replace(/\s*\(\d+\)$/,'')).join(', ')||'';
+  document.getElementById('mTitle').textContent=d.title||'—';
+
+  // Tags
+  const genres=[...(d.genres||[]),...(d.styles||[])].slice(0,5);
+  const fmts=(d.formats||[]).map(f=>f.name+(f.descriptions?` (${f.descriptions.slice(0,2).join(', ')})`:''));
+  document.getElementById('mTags').innerHTML=genres.map(g=>`<span class="mtag">${g}</span>`).join('')+fmts.map(f=>`<span class="mtag dk">${f}</span>`).join('');
+
+  // Condition
+  const condRaw=d.condition||d.sleeve_condition||'';
+  const {cls,label}=condClass(condRaw);
+  const condKey=Object.keys(COND_MAP).find(k=>k===condRaw);
+  const condShort=condRaw?COND_MAP[condRaw]||'?':'?';
+  const condDesc=condRaw?T[lang][`cond.${condShort}`]||condRaw:'';
+  const sleeveRaw=d.sleeve_condition||'';
+  document.getElementById('mCondition').innerHTML=`
+    <span class="cond-label" id="cond-label-id">${T[lang]['condition']}</span>
+    ${condRaw?`<span class="cond-badge ${cls}" aria-labelledby="cond-label-id" title="${condDesc}">${condShort}</span>`:'<span class="cond-badge cond-unknown">—</span>'}
+    ${sleeveRaw&&sleeveRaw!==condRaw?`<span class="cond-notes">Funda: ${condClass(sleeveRaw).cls.replace('cond-','')}</span>`:''}
+    ${condDesc?`<span class="cond-notes">${condDesc}</span>`:''}`;
+
+  // Info grid
   const released=d.released_formatted||d.year||'';
-  const notes=d.notes||'';
-  const tracks=d.tracklist||[];
+  const country=d.country||'';
+  const labels=(d.labels||[]);
   const community=d.community||{};
   const rating=community.rating||{};
   const ratingAvg=rating.average?Number(rating.average).toFixed(2):'—';
-  const ratingCount=rating.count||0;
 
-  // Tags
-  const allTags=[...genres,...styles].slice(0,6);
-  const fmtTags=formats.map(f=>f.name+(f.descriptions?` (${f.descriptions.join(', ')})`:''));
+  let infoHTML=`<div class="info-grid" aria-label="${T[lang]['details']}">`;
+  if(released) infoHTML+=`<div><p class="ii-label">Año</p><p class="ii-val">${released}</p></div>`;
+  if(country) infoHTML+=`<div><p class="ii-label">País</p><p class="ii-val">${country}</p></div>`;
+  if(labels.length) infoHTML+=`<div><p class="ii-label">Sello</p><p class="ii-val">${labels.map(l=>l.name+(l.catno?` · ${l.catno}`:'')).join('<br>')}</p></div>`;
+  if(d.master_id) infoHTML+=`<div><p class="ii-label">Master</p><p class="ii-val"><a href="https://www.discogs.com/master/${d.master_id}" target="_blank" rel="noopener">#${d.master_id}</a></p></div>`;
+  if(rating.count) infoHTML+=`<div><p class="ii-label">Rating</p><p class="ii-val">★ ${ratingAvg} <span style="color:var(--gray);font-size:11px;">(${rating.count.toLocaleString()} ${T[lang]['votes']})</span></p></div>`;
+  if(community.want||community.have) infoHTML+=`<div><p class="ii-label">Want / Have</p><p class="ii-val">${community.want||0} ${T[lang]['want']} · ${community.have||0} ${T[lang]['have']}</p></div>`;
+  infoHTML+='</div>';
 
-  mBody.innerHTML=`
-    <div class="modal-artist">${artists}</div>
-    <div class="modal-title">${d.title||'Sin título'}</div>
-    <div class="modal-tags">
-      ${allTags.map(t=>`<span class="mtag">${t}</span>`).join('')}
-      ${fmtTags.map(t=>`<span class="mtag dark">${t}</span>`).join('')}
-    </div>
-    <hr class="modal-divider">
-    <div class="info-grid">
-      ${released?`<div class="info-item"><div class="ii-label">Año</div><div class="ii-val">${released}</div></div>`:''}
-      ${country?`<div class="info-item"><div class="ii-label">País</div><div class="ii-val">${country}</div></div>`:''}
-      ${labels.length?`<div class="info-item"><div class="ii-label">Sello</div><div class="ii-val">${labels.map(l=>l.name+(l.catno?` · ${l.catno}`:'')).join('<br>')}</div></div>`:''}
-      ${d.master_id?`<div class="info-item"><div class="ii-label">Master ID</div><div class="ii-val"><a href="https://www.discogs.com/master/${d.master_id}" target="_blank">#${d.master_id}</a></div></div>`:''}
-      ${ratingCount?`<div class="info-item"><div class="ii-label">Rating Discogs</div><div class="ii-val">★ ${ratingAvg} <span style="color:var(--gray);font-size:11px;">(${ratingCount.toLocaleString()} votos)</span></div></div>`:''}
-      ${community.want||community.have?`<div class="info-item"><div class="ii-label">Want / Have</div><div class="ii-val">${community.want||0} quieren · ${community.have||0} tienen</div></div>`:''}
-    </div>
-    ${notes?`<div class="notes-section"><hr class="modal-divider"><div class="tracklist-title">NOTAS</div><p>${notes.substring(0,400)}${notes.length>400?'…':''}</p></div>`:''}
-    ${tracks.length?`
-      <hr class="modal-divider">
-      <div class="tracklist-title">${T[lang]['tracklist']} (${tracks.length} temas)</div>
-      ${tracks.filter(t=>t.type_!=='heading').slice(0,30).map(t=>`
-        <div class="track-row">
-          <span class="track-pos">${t.position||'·'}</span>
-          <span class="track-title">${t.title||''}</span>
-          ${t.duration?`<span class="track-dur">${t.duration}</span>`:''}
-        </div>`).join('')}
-      ${tracks.length>30?`<div style="font-size:11px;color:var(--gray);padding:8px 0;letter-spacing:2px;">... y ${tracks.length-30} temas más</div>`:''}
-    `:''}
-  `;
+  // Tracklist
+  const tracks=(d.tracklist||[]).filter(t=>t.type_!=='heading');
+  let tlHTML='';
+  if(tracks.length){
+    tlHTML+=`<hr class="mdivider"><h3 class="tl-head" id="tl-head">${T[lang]['tracklist']} <span style="color:var(--gray);font-size:12px;">(${tracks.length})</span></h3>`;
+    tlHTML+=`<ol aria-labelledby="tl-head" style="list-style:none;">`;
+    tracks.slice(0,40).forEach(t=>{
+      tlHTML+=`<li class="track"><span class="track-pos" aria-hidden="true">${t.position||'·'}</span><span class="track-name">${t.title||''}</span>${t.duration?`<span class="track-dur" aria-label="Duración ${t.duration}">${t.duration}</span>`:''}</li>`;
+    });
+    tlHTML+='</ol>';
+    if(tracks.length>40) tlHTML+=`<p class="tl-more">... y ${tracks.length-40} temas más</p>`;
+  }
 
-  mFooter.innerHTML=`
-    <a href="https://www.discogs.com/release/${d.id}" target="_blank" class="discogs-link">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="white"/></svg>
+  // Notes
+  const notes=d.notes||'';
+  let notesHTML='';
+  if(notes) notesHTML+=`<hr class="mdivider"><h3 class="tl-head">NOTAS</h3><p style="font-size:12px;color:var(--gray);line-height:1.7;">${notes.substring(0,500)}${notes.length>500?'…':''}</p>`;
+
+  document.getElementById('mBody').innerHTML=infoHTML+tlHTML+notesHTML;
+  document.getElementById('mFoot').innerHTML=`
+    <a href="https://www.discogs.com/release/${d.id}" target="_blank" rel="noopener" class="disc-link">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="white" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="white"/></svg>
       ${T[lang]['open.discogs']}
     </a>
-    <span style="font-size:11px;color:var(--gray);letter-spacing:1px;">ID: ${d.id}</span>
-  `;
+    <span class="m-id">ID: ${d.id}</span>`;
 }
 
 function closeModal(e){
   if(!e||e.target===document.getElementById('discModal')){
     document.getElementById('discModal').classList.remove('on');
     document.body.style.overflow='';
+    lastFocus?.focus();
   }
 }
 
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
-
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded',()=>{ loadCollection(1); });
+document.addEventListener('DOMContentLoaded',()=>{loadCollection(1);});
 </script>
 </body>
 </html>
