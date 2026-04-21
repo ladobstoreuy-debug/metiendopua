@@ -196,11 +196,11 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:56px 4
     <span class="nav-brand">METIENDO <span>PÚA</span></span>
   </a>
   <ul class="nav-links" role="list">
-    <li><a href="#videos" data-i18n="nav.videos">Videos</a></li>
-    <li><a href="coleccion.html" data-i18n="nav.col">Colección</a></li>
-    <li><a href="#buscador" data-i18n="nav.search">Buscador Musical</a></li>
-    <li><a href="#sobre" data-i18n="nav.about">Nosotros</a></li>
-    <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener" data-i18n="nav.yt">Canal ↗</a></li>
+    <li><a href="index.html#videos">Videos</a></li>
+    <li><a href="coleccion.html">Colección</a></li>
+    <li><a href="buscar.html">Buscador</a></li>
+    <li><a href="index.html#buscador">Wikidata</a></li>
+    <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal ↗</a></li>
   </ul>
   <div class="nav-right">
     <div class="lang-group" role="group" aria-label="Seleccionar idioma">
@@ -215,11 +215,12 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:56px 4
 
 <!-- MOBILE NAV -->
 <nav id="mobileNav" class="mobile-nav" aria-label="Menú móvil" aria-hidden="true">
-  <a href="#videos" onclick="closeMobileMenu()" data-i18n="nav.videos">Videos</a>
-  <a href="coleccion.html" data-i18n="nav.col">Colección</a>
-  <a href="#buscador" onclick="closeMobileMenu()" data-i18n="nav.search">Buscador Musical</a>
-  <a href="#sobre" onclick="closeMobileMenu()" data-i18n="nav.about">Nosotros</a>
+  <a href="index.html#videos" onclick="closeMenu()">Videos</a>
+  <a href="coleccion.html" onclick="closeMenu()">Colección</a>
+  <a href="buscar.html" onclick="closeMenu()">Buscador</a>
+  <a href="index.html#buscador" onclick="closeMenu()">Wikidata</a>
   <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal YouTube ↗</a>
+  
   <div class="mobile-nav-footer">
     <button class="lang-btn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
     <button class="lang-btn" aria-pressed="false" onclick="setLang('en')" lang="en">EN</button>

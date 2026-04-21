@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buscador de Música — Metiendo Púa</title>
+<meta name="description" content="Buscá artistas y discos en la base de datos de Discogs. Precios de mercado, tracklist, ediciones y datos de Wikipedia.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0A0A0A;--dark:#111;--card:#161616;--card2:#1c1c1c;--border:#222;--orange:#FF6B00;--odim:rgba(255,107,0,0.12);--white:#fff;--gray:#888;--gray2:#bbb;--red:#C8102E;--green:#22c55e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+.skip-link{position:absolute;top:-100px;left:16px;background:var(--orange);color:#fff;padding:10px 18px;font-weight:700;font-size:13px;letter-spacing:2px;text-decoration:none;z-index:99999;transition:top 0.2s;}
+.skip-link:focus{top:8px;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;}
+body{background:var(--black);color:var(--white);font-family:'Montserrat',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.pua{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:20px solid var(--orange);filter:drop-shadow(0 0 6px rgba(255,107,0,0.7));}
+.nav-brand{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;}
+.nav-brand span{color:var(--orange);}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none;}
+.nav-links a{color:var(--gray);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;transition:color 0.2s;padding:4px 2px;}
+.nav-links a:hover,.nav-links a[aria-current="page"]{color:var(--orange);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.lang-group{display:flex;gap:4px;}
+.lbtn{background:transparent;border:1px solid var(--border);color:var(--gray);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;padding:5px 10px;cursor:pointer;transition:all 0.2s;}
+.lbtn[aria-pressed="true"],.lbtn:hover{background:var(--orange);border-color:var(--orange);color:#fff;}
+.menu-btn{display:none;background:transparent;border:1px solid var(--border);color:var(--white);padding:8px 10px;cursor:pointer;align-items:center;justify-content:center;}
+.menu-btn svg{width:20px;height:20px;fill:currentColor;}
+.mobile-nav{display:none;position:fixed;inset:0;top:64px;background:rgba(10,10,10,0.98);z-index:999;padding:32px 24px;flex-direction:column;gap:0;overflow-y:auto;}
+.mobile-nav.open{display:flex;}
+.mobile-nav a{color:var(--white);text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;padding:16px 0;border-bottom:1px solid var(--border);transition:color 0.2s;}
+.mobile-nav a:hover,.mobile-nav a[aria-current="page"]{color:var(--orange);}
+.mobile-nav-footer{margin-top:auto;padding-top:24px;display:flex;gap:8px;}
+
+/* PAGE HERO */
+.page-hero{padding:100px 60px 0;background:var(--dark);position:relative;overflow:hidden;}
+.page-hero::after{content:'';position:absolute;right:-150px;top:-150px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,0,0.07) 0%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:1400px;margin:0 auto;padding-bottom:0;}
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:11px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;}
+.breadcrumb a{color:var(--gray);text-decoration:none;transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--orange);}
+.breadcrumb span{color:var(--orange);}
+.page-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,80px);letter-spacing:2px;line-height:0.9;margin-bottom:12px;}
+.page-h1 em{color:var(--orange);font-style:normal;}
+.page-sub{font-size:13px;color:var(--gray2);max-width:500px;line-height:1.8;margin-bottom:32px;}
+
+/* SEARCH BAR */
+.search-hero{background:var(--dark);padding:0 60px 40px;border-bottom:1px solid var(--border);position:sticky;top:64px;z-index:100;backdrop-filter:blur(12px);}
+.search-hero-inner{max-width:1400px;margin:0 auto;}
+.search-row{display:flex;gap:0;margin-bottom:14px;}
+.search-input{flex:1;background:var(--card);border:1px solid var(--border);border-right:none;color:var(--white);font-family:'Montserrat',sans-serif;font-size:15px;padding:16px 20px;outline:none;transition:border-color 0.2s;}
+.search-input:focus{border-color:var(--orange);}
+.search-input::placeholder{color:var(--gray);}
+.search-go{background:var(--orange);border:none;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;padding:16px 28px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.search-go:hover{background:#ff8533;}
+.search-go:disabled{background:var(--border);cursor:not-allowed;}
+.type-pills{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.type-pill{background:transparent;border:1px solid var(--border);color:var(--gray);font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;cursor:pointer;transition:all 0.2s;border-radius:0;}
+.type-pill.active,.type-pill:hover{background:var(--odim);border-color:var(--orange);color:var(--orange);}
+.search-status{font-size:11px;color:var(--gray);letter-spacing:2px;margin-left:auto;}
+
+/* RESULTS GRID */
+.results-wrap{max-width:1400px;margin:0 auto;padding:40px 60px 80px;}
+.r-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;}
+
+/* CARDS */
+.r-card{background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all 0.3s;position:relative;}
+.r-card:hover,.r-card:focus-visible{border-color:var(--orange);transform:translateY(-3px);box-shadow:0 14px 40px rgba(0,0,0,0.5),0 0 20px rgba(255,107,0,0.1);}
+.r-card-cover{position:relative;width:100%;padding-bottom:100%;background:#0d0d0d;overflow:hidden;}
+.r-card-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
+.r-card:hover .r-card-cover img{transform:scale(1.05);}
+.r-card-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#111;}
+.r-card-ph-vinyl{width:72px;height:72px;border-radius:50%;background:conic-gradient(#1a1a1a 0deg,#252525 3deg,#1a1a1a 6deg,#222 9deg,#1a1a1a 12deg);position:relative;}
+.r-card-ph-vinyl::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:radial-gradient(circle,#FF8C30,var(--red));}
+.r-card-ph-person{font-size:52px;opacity:0.3;}
+.r-card-overlay{position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background 0.3s;}
+.r-card:hover .r-card-overlay,.r-card:focus-visible .r-card-overlay{background:rgba(0,0,0,0.5);}
+.r-card-zoom{width:44px;height:44px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.7);transition:all 0.3s;}
+.r-card:hover .r-card-zoom,.r-card:focus-visible .r-card-zoom{opacity:1;transform:scale(1);}
+.r-card-zoom svg{width:18px;height:18px;fill:#fff;}
+.r-type-badge{position:absolute;top:8px;left:8px;font-size:9px;font-weight:700;letter-spacing:2px;padding:3px 8px;text-transform:uppercase;}
+.badge-release{background:var(--odim);border:1px solid rgba(255,107,0,0.3);color:var(--orange);}
+.badge-artist{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#86efac;}
+.badge-master{background:rgba(100,100,255,0.1);border:1px solid rgba(100,100,255,0.3);color:#a5b4fc;}
+.r-card-info{padding:12px 14px;}
+.r-card-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;line-height:1.2;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.r-card-sub{font-size:11px;color:var(--gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.r-card-meta{font-size:10px;color:var(--gray);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap;}
+.r-card-meta span{white-space:nowrap;}
+
+/* SKELETON */
+.skel{background:var(--card);border:1px solid var(--border);animation:pulse 1.5s infinite;}
+.skel-sq{width:100%;padding-bottom:100%;background:#181818;}
+.skel-body{padding:12px 14px;}
+.skel-line{height:11px;background:#1e1e1e;border-radius:2px;margin-bottom:8px;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.55}}
+
+/* PAGINATION */
+.pgbar{display:flex;align-items:center;justify-content:center;gap:8px;padding:40px 0 20px;flex-wrap:wrap;}
+.pgbtn{background:var(--card);border:1px solid var(--border);color:var(--gray2);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;padding:9px 15px;cursor:pointer;transition:all 0.2s;min-width:42px;text-align:center;}
+.pgbtn:hover:not(:disabled),.pgbtn:focus-visible:not(:disabled){border-color:var(--orange);color:var(--orange);}
+.pgbtn[aria-current="page"]{background:var(--orange);border-color:var(--orange);color:#fff;}
+.pgbtn:disabled{opacity:0.3;cursor:not-allowed;}
+
+/* EMPTY / ERROR */
+.empty{text-align:center;padding:80px 40px;color:var(--gray);}
+.empty-ico{font-size:52px;margin-bottom:16px;}
+.empty h3{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:8px;color:var(--white);}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px;}
+.chip{background:var(--card);border:1px solid var(--border);color:var(--gray2);font-size:12px;padding:7px 14px;cursor:pointer;transition:all 0.2s;}
+.chip:hover,.chip:focus-visible{border-color:var(--orange);color:var(--orange);background:var(--odim);}
+
+/* ===== MODALS ===== */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:9000;display:flex;align-items:flex-start;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.3s;overflow-y:auto;}
+.modal.on{opacity:1;pointer-events:all;}
+.modal-box{width:100%;max-width:1000px;background:var(--card);border:1px solid var(--border);position:relative;margin:auto;animation:mIn 0.3s ease both;}
+@keyframes mIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.modal-x{position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.6);border:1px solid var(--border);color:var(--gray);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:6px 12px;cursor:pointer;transition:all 0.2s;z-index:10;}
+.modal-x:hover,.modal-x:focus-visible{border-color:var(--orange);color:var(--orange);}
+
+/* RELEASE MODAL */
+.rm-top{display:grid;grid-template-columns:280px 1fr;gap:0;}
+.rm-cover{width:280px;flex-shrink:0;}
+.rm-cover img{width:280px;height:280px;object-fit:cover;display:block;}
+.rm-cover-ph{width:280px;height:280px;background:#111;display:flex;align-items:center;justify-content:center;}
+.rm-cv{width:140px;height:140px;border-radius:50%;background:conic-gradient(#1a1a1a 0deg,#252525 3deg,#1a1a1a 6deg,#222 9deg,#1a1a1a 12deg);position:relative;animation:spin 12s linear infinite;}
+.rm-cv::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,#FF8C30,var(--red));}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.rm-header{padding:24px 24px 16px;}
+.rm-artist{font-size:11px;font-weight:700;color:var(--orange);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;}
+.rm-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,3.5vw,38px);letter-spacing:1px;line-height:1;margin-bottom:12px;}
+.rm-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:0;}
+.mtag{font-size:9px;font-weight:700;letter-spacing:2px;padding:3px 9px;border:1px solid;}
+.mtag-o{background:var(--odim);border-color:rgba(255,107,0,0.2);color:var(--orange);}
+.mtag-g{background:rgba(255,255,255,0.04);border-color:var(--border);color:var(--gray2);}
+
+/* PRICE BAR */
+.price-bar{padding:16px 24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:20px;flex-wrap:wrap;background:rgba(34,197,94,0.04);}
+.price-item{text-align:center;}
+.price-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:2px;}
+.price-value{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);line-height:1;}
+.price-value.med{color:var(--orange);}
+.price-value.hi{color:#f87171;}
+.price-divider{width:1px;height:40px;background:var(--border);flex-shrink:0;}
+.for-sale{font-size:11px;color:var(--gray);margin-left:auto;}
+.for-sale strong{color:var(--white);}
+.price-loading{font-size:11px;color:var(--gray);letter-spacing:2px;padding:4px 0;animation:pulse 1.5s infinite;}
+.price-na{font-size:11px;color:var(--gray);letter-spacing:1px;}
+
+/* BODY SECTIONS */
+.rm-body{padding:20px 24px;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin-bottom:16px;}
+.ii-lbl{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:3px;}
+.ii-val{font-size:13px;color:var(--gray2);line-height:1.5;}
+.ii-val a{color:var(--orange);text-decoration:none;}
+.ii-val a:hover{text-decoration:underline;}
+.mdiv{border:none;border-top:1px solid var(--border);margin:14px 0;}
+.sec-head{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:10px;}
+
+/* TRACKLIST */
+.track{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.track:last-child{border-bottom:none;}
+.track-pos{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gray);min-width:26px;flex-shrink:0;}
+.track-name{font-size:12px;color:var(--gray2);flex:1;line-height:1.4;}
+.track-dur{font-size:11px;color:var(--gray);font-weight:600;white-space:nowrap;flex-shrink:0;}
+.track-more{font-size:11px;color:var(--gray);padding:8px 0;letter-spacing:2px;}
+
+/* EDITIONS TABLE */
+.editions-wrap{max-height:220px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.editions-wrap::-webkit-scrollbar{width:4px;}
+.editions-wrap::-webkit-scrollbar-thumb{background:var(--border);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{text-align:left;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);padding:8px 10px;border-bottom:1px solid var(--border);background:rgba(255,107,0,0.04);white-space:nowrap;}
+tbody tr{border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.15s;cursor:pointer;}
+tbody tr:hover{background:rgba(255,255,255,0.03);}
+tbody td{padding:8px 10px;color:var(--gray2);vertical-align:middle;}
+tbody td a{color:var(--orange);text-decoration:none;}
+tbody td a:hover{text-decoration:underline;}
+
+/* MODAL FOOTER */
+.rm-foot{padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:rgba(0,0,0,0.2);}
+.btn-link{display:inline-flex;align-items:center;gap:7px;background:var(--orange);color:#fff;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:2px;padding:10px 18px;transition:all 0.2s;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;}
+.btn-link:hover,.btn-link:focus-visible{background:#ff8533;box-shadow:0 0 20px rgba(255,107,0,0.35);}
+.btn-link-outline{background:transparent;border:1px solid var(--border);color:var(--gray2);}
+.btn-link-outline:hover,.btn-link-outline:focus-visible{border-color:var(--orange);color:var(--orange);background:var(--odim);}
+
+/* ARTIST MODAL */
+.am-top{display:grid;grid-template-columns:220px 1fr;gap:0;}
+.am-photo{width:220px;min-height:220px;background:#111;flex-shrink:0;position:relative;overflow:hidden;}
+.am-photo img{width:220px;height:220px;object-fit:cover;display:block;}
+.am-photo-ph{width:220px;height:220px;display:flex;align-items:center;justify-content:center;font-size:80px;opacity:0.2;}
+.am-header{padding:24px;}
+.am-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,48px);letter-spacing:2px;line-height:1;margin-bottom:10px;}
+.am-desc{font-size:12px;color:var(--gray2);line-height:1.8;margin-bottom:14px;}
+.am-facts{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
+.am-fact{background:var(--card2);border:1px solid var(--border);padding:8px 14px;font-size:11px;}
+.am-fact-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:2px;}
+.am-fact-val{font-size:13px;color:var(--white);font-weight:600;}
+.am-wiki-note{font-size:11px;color:var(--gray);line-height:1.6;border-left:2px solid var(--orange);padding-left:12px;margin-top:10px;}
+.am-wiki-note strong{color:var(--orange);}
+.am-body{padding:20px 24px;}
+/* Discography grid */
+.disco-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;max-height:380px;overflow-y:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.disco-grid::-webkit-scrollbar{width:4px;}
+.disco-grid::-webkit-scrollbar-thumb{background:var(--border);}
+.disco-item{background:var(--card2);border:1px solid var(--border);cursor:pointer;transition:all 0.2s;}
+.disco-item:hover,.disco-item:focus-visible{border-color:var(--orange);transform:translateY(-2px);}
+.disco-item-cover{width:100%;padding-bottom:100%;background:#0d0d0d;position:relative;overflow:hidden;}
+.disco-item-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.disco-item-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.disco-item-ph-v{width:48px;height:48px;border-radius:50%;background:conic-gradient(#1a1a1a 0deg,#252525 3deg,#1a1a1a 6deg);position:relative;}
+.disco-item-ph-v::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,#FF8C30,var(--red));}
+.disco-item-info{padding:8px 10px;}
+.disco-item-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:3px;}
+.disco-item-year{font-size:10px;color:var(--gray);}
+.disco-item-role{font-size:9px;color:var(--orange);font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+
+/* FOOTER */
+footer{background:var(--black);border-top:1px solid var(--border);padding:48px 40px 32px;text-align:center;}
+.foot-logo{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:4px;margin-bottom:6px;}
+.foot-logo span{color:var(--orange);}
+.foot-tag{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gray);margin-bottom:24px;}
+.foot-links{display:flex;justify-content:center;gap:24px;list-style:none;margin-bottom:28px;flex-wrap:wrap;}
+.foot-links a{color:var(--gray);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;transition:color 0.2s;padding:4px;}
+.foot-links a:hover{color:var(--orange);}
+.foot-copy{font-size:11px;color:#333;letter-spacing:1px;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .menu-btn{display:flex;}
+  .page-hero,.search-hero{padding-left:24px;padding-right:24px;}
+  .results-wrap{padding:24px 24px 60px;}
+  .r-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  .rm-top,.am-top{grid-template-columns:1fr;}
+  .rm-cover,.am-photo{width:100%;}
+  .rm-cover img,.am-photo img,.am-photo-ph{width:100%;height:220px;}
+  .rm-cv{margin:auto;}
+  .info-grid{grid-template-columns:1fr;}
+  footer{padding:36px 24px 24px;}
+}
+@media(max-width:480px){
+  .r-grid{grid-template-columns:repeat(2,1fr);}
+  .price-bar{gap:12px;}
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+<!-- NAV -->
+<nav role="navigation" aria-label="Navegación principal">
+  <a href="index.html" class="nav-logo" aria-label="Metiendo Púa - Inicio">
+    <div class="pua" aria-hidden="true"></div>
+    <span class="nav-brand">METIENDO <span>PÚA</span></span>
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="index.html#videos">Videos</a></li>
+    <li><a href="coleccion.html">Colección</a></li>
+    <li><a href="buscar.html" aria-current="page">Buscador</a></li>
+    <li><a href="index.html#buscador">Wikidata</a></li>
+    <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal ↗</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-group" role="group" aria-label="Idioma">
+      <button class="lbtn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
+      <button class="lbtn" aria-pressed="false" onclick="setLang('en')" lang="en">EN</button>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</nav>
+
+<nav id="mobileNav" class="mobile-nav" aria-label="Menú móvil" aria-hidden="true">
+  <a href="index.html#videos" onclick="closeMenu()">Videos</a>
+  <a href="coleccion.html" onclick="closeMenu()">Colección</a>
+  <a href="buscar.html" aria-current="page">Buscador</a>
+  <a href="index.html#buscador" onclick="closeMenu()">Wikidata</a>
+  <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal YouTube ↗</a>
+  <div class="mobile-nav-footer">
+    <button class="lbtn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
+    <button class="lbtn" aria-pressed="false" onclick="setLang('en')" lang="en">EN</button>
+  </div>
+</nav>
+
+<main id="main-content">
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hero-inner">
+    <nav class="breadcrumb" aria-label="Ubicación">
+      <a href="index.html">Metiendo Púa</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page" data-i18n="bc">Buscador</span>
+    </nav>
+    <h1 class="page-h1"><em data-i18n="h1a">BUSCADOR</em> <span data-i18n="h1b">MUSICAL</span></h1>
+    <p class="page-sub" data-i18n="hero.sub">Buscá artistas y discos en la base de datos de Discogs. Precios de mercado, tracklist, ediciones y datos de Wikipedia.</p>
+  </div>
+</div>
+
+<!-- STICKY SEARCH -->
+<div class="search-hero" role="search">
+  <div class="search-hero-inner">
+    <div class="search-row">
+      <label for="searchInp" class="sr-only">Buscar en Discogs</label>
+      <input type="search" id="searchInp" class="search-input"
+        placeholder="Pink Floyd, Thriller, Led Zeppelin, AC/DC..."
+        onkeydown="if(event.key==='Enter')doSearch(1)"
+        aria-label="Buscar artistas o discos en Discogs"/>
+      <button class="search-go" id="searchBtn" onclick="doSearch(1)" aria-label="Buscar">
+        <span data-i18n="btn.search">BUSCAR</span>
+      </button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <div class="type-pills" role="group" aria-label="Tipo de búsqueda">
+        <button class="type-pill active" data-type="all" onclick="setType('all')" aria-pressed="true" data-i18n="type.all">Todo</button>
+        <button class="type-pill" data-type="release" onclick="setType('release')" aria-pressed="false" data-i18n="type.release">Discos</button>
+        <button class="type-pill" data-type="artist" onclick="setType('artist')" aria-pressed="false" data-i18n="type.artist">Artistas</button>
+        <button class="type-pill" data-type="master" onclick="setType('master')" aria-pressed="false" data-i18n="type.master">Masters</button>
+      </div>
+      <span class="search-status" id="searchStatus" aria-live="polite" aria-atomic="true"></span>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="results-wrap">
+  <div class="r-grid" id="rGrid" role="list" aria-label="Resultados de búsqueda" aria-live="polite">
+    <!-- Initial empty state -->
+    <div style="grid-column:1/-1;">
+      <div class="empty">
+        <div class="empty-ico" aria-hidden="true">🎵</div>
+        <h3 data-i18n="empty.title">Buscá cualquier artista o disco</h3>
+        <p data-i18n="empty.sub" style="font-size:13px;max-width:400px;margin:8px auto 0;">Base de datos Discogs con millones de registros. Resultados con portadas, tracklist, ediciones y precios.</p>
+        <div class="chips" role="list" aria-label="Búsquedas sugeridas">
+          <button class="chip" onclick="quickSearch('Pink Floyd')" role="listitem">Pink Floyd</button>
+          <button class="chip" onclick="quickSearch('The Beatles')" role="listitem">The Beatles</button>
+          <button class="chip" onclick="quickSearch('Led Zeppelin')" role="listitem">Led Zeppelin</button>
+          <button class="chip" onclick="quickSearch('David Bowie')" role="listitem">David Bowie</button>
+          <button class="chip" onclick="quickSearch('Fleetwood Mac')" role="listitem">Fleetwood Mac</button>
+          <button class="chip" onclick="quickSearch('AC/DC')" role="listitem">AC/DC</button>
+          <button class="chip" onclick="quickSearch('Queen')" role="listitem">Queen</button>
+          <button class="chip" onclick="quickSearch('Rolling Stones')" role="listitem">Rolling Stones</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="pgbar" id="pgBar" aria-label="Paginación" style="display:none;"></nav>
+</div>
+
+</main>
+
+<footer role="contentinfo">
+  <p class="foot-logo" aria-label="Metiendo Púa">METIENDO <span>PÚA</span></p>
+  <p class="foot-tag">70s · 80s · 90s Rock & Pop en Vinilo — Uruguay</p>
+  <ul class="foot-links" role="list">
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="coleccion.html">Colección</a></li>
+    <li><a href="buscar.html" aria-current="page">Buscador</a></li>
+    <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">YouTube ↗</a></li>
+  </ul>
+  <p class="foot-copy">© 2025 Metiendo Púa — Uruguay</p>
+</footer>
+
+<!-- RELEASE MODAL -->
+<div class="modal" id="relModal" role="dialog" aria-modal="true" aria-labelledby="rmTitle" onclick="closeAllModals(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-x" onclick="closeAllModals()" aria-label="Cerrar">✕ CERRAR</button>
+    <div class="rm-top">
+      <div class="rm-cover" id="rmCover"><div class="rm-cover-ph"><div class="rm-cv" aria-hidden="true"></div></div></div>
+      <div>
+        <div class="rm-header">
+          <p class="rm-artist" id="rmArtist"></p>
+          <h2 class="rm-title" id="rmTitle">Cargando...</h2>
+          <div class="rm-tags" id="rmTags"></div>
+        </div>
+        <div class="price-bar" id="rmPrice" aria-label="Precios de mercado">
+          <span class="price-loading">Cargando precios...</span>
+        </div>
+      </div>
+    </div>
+    <div class="rm-body" id="rmBody"></div>
+    <div class="rm-foot" id="rmFoot"></div>
+  </div>
+</div>
+
+<!-- ARTIST MODAL -->
+<div class="modal" id="artModal" role="dialog" aria-modal="true" aria-labelledby="amName" onclick="closeAllModals(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-x" onclick="closeAllModals()" aria-label="Cerrar">✕ CERRAR</button>
+    <div class="am-top">
+      <div class="am-photo" id="amPhoto"><div class="am-photo-ph" aria-hidden="true">🎸</div></div>
+      <div class="am-header">
+        <h2 class="am-name" id="amName">Cargando...</h2>
+        <p class="am-desc" id="amDesc"></p>
+        <div class="am-facts" id="amFacts"></div>
+        <div id="amWiki" style="display:none;"></div>
+      </div>
+    </div>
+    <div class="am-body" id="amBody"></div>
+    <div class="rm-foot" id="amFoot"></div>
+  </div>
+</div>
+
+<script>
+// ===== I18N =====
+const T={
+  es:{
+    'bc':'Buscador','h1a':'BUSCADOR','h1b':'MUSICAL',
+    'hero.sub':'Buscá artistas y discos en la base de datos de Discogs. Precios de mercado, tracklist, ediciones y datos de Wikipedia.',
+    'btn.search':'BUSCAR',
+    'type.all':'Todo','type.release':'Discos','type.artist':'Artistas','type.master':'Masters',
+    'empty.title':'Buscá cualquier artista o disco',
+    'empty.sub':'Base de datos Discogs con millones de registros. Resultados con portadas, tracklist, ediciones y precios.',
+    'status.searching':'Buscando...','status.results':'resultados','status.none':'Sin resultados para',
+    'status.error':'Error al buscar. Intentá de nuevo.',
+    'price.min':'Mínimo','price.med':'Promedio','price.max':'Máximo','price.sale':'a la venta',
+    'price.na':'Sin datos de mercado disponibles','price.loading':'Cargando precios...',
+    'sec.tracklist':'TRACKLIST','sec.info':'DETALLES','sec.editions':'EDICIONES',
+    'sec.disco':'DISCOGRAFÍA','sec.wiki':'DATOS DE WIKIPEDIA / WIKIDATA',
+    'open.discogs':'Ver en Discogs ↗','open.wiki':'Wikipedia ↗','open.wikidata':'Wikidata ↗',
+    'year.active':'Período activo','members':'Integrantes',
+    'loading':'Cargando...','more.tracks':'temas más',
+    'col.year':'Año','col.country':'País','col.label':'Sello','col.format':'Formato',
+  },
+  en:{
+    'bc':'Search','h1a':'MUSIC','h1b':'SEARCH',
+    'hero.sub':'Search artists and records in the Discogs database. Market prices, tracklist, editions and Wikipedia data.',
+    'btn.search':'SEARCH',
+    'type.all':'All','type.release':'Records','type.artist':'Artists','type.master':'Masters',
+    'empty.title':'Search any artist or record',
+    'empty.sub':'Discogs database with millions of records. Results with covers, tracklist, editions and prices.',
+    'status.searching':'Searching...','status.results':'results','status.none':'No results for',
+    'status.error':'Search error. Please try again.',
+    'price.min':'Minimum','price.med':'Average','price.max':'Maximum','price.sale':'for sale',
+    'price.na':'No market data available','price.loading':'Loading prices...',
+    'sec.tracklist':'TRACKLIST','sec.info':'DETAILS','sec.editions':'EDITIONS',
+    'sec.disco':'DISCOGRAPHY','sec.wiki':'WIKIPEDIA / WIKIDATA DATA',
+    'open.discogs':'View on Discogs ↗','open.wiki':'Wikipedia ↗','open.wikidata':'Wikidata ↗',
+    'year.active':'Active period','members':'Members',
+    'loading':'Loading...','more.tracks':'more tracks',
+    'col.year':'Year','col.country':'Country','col.label':'Label','col.format':'Format',
+  }
+};
+let lang='es';
+function setLang(l){
+  lang=l;
+  document.documentElement.lang=l;
+  document.querySelectorAll('.lbtn').forEach(b=>b.setAttribute('aria-pressed',b.getAttribute('onclick').includes(`'${l}'`)?'true':'false'));
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(T[l][k])el.textContent=T[l][k];});
+  document.getElementById('searchInp').placeholder=l==='es'?'Pink Floyd, Thriller, Led Zeppelin, AC/DC...':'Pink Floyd, Thriller, Led Zeppelin, AC/DC...';
+}
+
+// ===== MOBILE MENU =====
+const menuBtn=document.getElementById('menuBtn');
+const mobileNav=document.getElementById('mobileNav');
+menuBtn.addEventListener('click',()=>{
+  const open=mobileNav.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded',String(open));
+  mobileNav.setAttribute('aria-hidden',String(!open));
+  menuBtn.setAttribute('aria-label',open?'Cerrar menú':'Abrir menú');
+  if(open) mobileNav.querySelector('a').focus();
+});
+function closeMenu(){mobileNav.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');mobileNav.setAttribute('aria-hidden','true');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu();closeAllModals();}});
+
+// ===== SEARCH STATE =====
+let currentType='all', currentQuery='', currentPage=1, totalPages=1, totalResults=0;
+
+function setType(t){
+  currentType=t;
+  document.querySelectorAll('.type-pill').forEach(p=>{
+    const active=p.dataset.type===t;
+    p.classList.toggle('active',active);
+    p.setAttribute('aria-pressed',String(active));
+  });
+  if(currentQuery) doSearch(1);
+}
+
+function quickSearch(q){
+  document.getElementById('searchInp').value=q;
+  doSearch(1);
+}
+
+async function doSearch(page=1){
+  const q=document.getElementById('searchInp').value.trim();
+  if(!q) return;
+  currentQuery=q;
+  currentPage=page;
+
+  const grid=document.getElementById('rGrid');
+  const status=document.getElementById('searchStatus');
+  const btn=document.getElementById('searchBtn');
+  status.textContent=T[lang]['status.searching'];
+  btn.disabled=true;
+  showSkeletons(grid);
+  document.getElementById('pgBar').style.display='none';
+
+  try{
+    const params=new URLSearchParams({action:'search',q,type:currentType,page});
+    const r=await fetch(`/api/search?${params}`,{signal:AbortSignal.timeout(10000)});
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data=await r.json();
+    const results=data.results||[];
+    totalPages=data.pagination?.pages||1;
+    totalResults=data.pagination?.items||results.length;
+
+    if(!results.length){
+      status.textContent=`${T[lang]['status.none']} "${q}"`;
+      grid.innerHTML=`<div style="grid-column:1/-1;"><div class="empty"><div class="empty-ico">🔍</div><h3>${T[lang]['status.none']} "${q}"</h3></div></div>`;
+      btn.disabled=false;
+      return;
+    }
+
+    status.textContent=`${totalResults.toLocaleString()} ${T[lang]['status.results']}`;
+    renderResults(results, grid);
+    renderPagination();
+
+  }catch(err){
+    status.textContent=T[lang]['status.error'];
+    grid.innerHTML=`<div style="grid-column:1/-1;"><div class="empty"><div class="empty-ico">⚠️</div><h3>${T[lang]['status.error']}</h3><p style="font-size:12px;margin-top:8px;">${err.message}</p></div></div>`;
+  }
+  btn.disabled=false;
+}
+
+function showSkeletons(grid){
+  grid.innerHTML=Array(12).fill(0).map(()=>`
+    <div class="skel" aria-hidden="true">
+      <div class="skel-sq"></div>
+      <div class="skel-body">
+        <div class="skel-line" style="width:${55+Math.random()*35|0}%"></div>
+        <div class="skel-line" style="width:${35+Math.random()*25|0}%"></div>
+      </div>
+    </div>`).join('');
+}
+
+function renderResults(results, grid){
+  grid.innerHTML='';
+  results.forEach(item=>{
+    const type=item.type||'release';
+    const title=item.title||'Sin título';
+    const thumb=item.thumb||item.cover_image||'';
+    const year=item.year||item.released||'';
+    const country=item.country||'';
+    const format=(item.format||[]).slice(0,2).join(', ');
+    const label=(item.label||[]).slice(0,1).join('');
+    const isArtist=type==='artist';
+    const isMaster=type==='master';
+
+    // Badge
+    const badgeClass=isArtist?'badge-artist':isMaster?'badge-master':'badge-release';
+    const badgeText=isArtist?(lang==='es'?'Artista':'Artist'):isMaster?'Master':(lang==='es'?'Disco':'Record');
+
+    // For artist cards: title is "Artist Name"
+    // For release: title is "Artist - Album"
+    let mainTitle=title, subTitle='';
+    if(!isArtist && title.includes(' - ')){
+      const parts=title.split(' - ');
+      subTitle=parts[0];
+      mainTitle=parts.slice(1).join(' - ');
+    }
+
+    const card=document.createElement('article');
+    card.className='r-card';
+    card.setAttribute('role','listitem');
+    card.setAttribute('tabindex','0');
+    card.setAttribute('aria-label',`${badgeText}: ${title}`);
+    card.innerHTML=`
+      <div class="r-card-cover">
+        ${thumb
+          ?`<img src="${thumb}" alt="${escStr(title)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'r-card-ph\\'>${isArtist?'<span class=\\'r-card-ph-person\\' aria-hidden=\\'true\\'>🎸</span>':'<div class=\\'r-card-ph-vinyl\\'></div>'}</div>'">`
+          :`<div class="r-card-ph">${isArtist?'<span class="r-card-ph-person" aria-hidden="true">🎸</span>':'<div class="r-card-ph-vinyl"></div>'}</div>`}
+        <div class="r-card-overlay" aria-hidden="true">
+          <div class="r-card-zoom"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+        </div>
+        <span class="r-type-badge ${badgeClass}" aria-hidden="true">${badgeText}</span>
+      </div>
+      <div class="r-card-info">
+        ${subTitle?`<p class="r-card-sub">${escStr(subTitle)}</p>`:''}
+        <h3 class="r-card-title">${escStr(mainTitle)}</h3>
+        <div class="r-card-meta">
+          ${year?`<span>${year}</span>`:''}
+          ${country?`<span>${country}</span>`:''}
+          ${format?`<span>${format}</span>`:''}
+          ${label&&!isArtist?`<span>${escStr(label)}</span>`:''}
+        </div>
+      </div>`;
+
+    const handler=()=>{
+      if(isArtist) openArtist(item.id, title);
+      else openRelease(item.id, item.master_id, title);
+    };
+    card.onclick=handler;
+    card.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();handler();}};
+    grid.appendChild(card);
+  });
+}
+
+function escStr(s){return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ===== PAGINATION =====
+function renderPagination(){
+  const bar=document.getElementById('pgBar');
+  if(totalPages<=1){bar.style.display='none';return;}
+  bar.style.display='flex';
+  const range=pgRange(currentPage,totalPages);
+  let html=`<button class="pgbtn" onclick="doSearch(${currentPage-1})" ${currentPage===1?'disabled':''} aria-label="Anterior">‹</button>`;
+  range.forEach(p=>{
+    if(p==='…') html+=`<span style="color:var(--gray);padding:0 4px;" aria-hidden="true">…</span>`;
+    else html+=`<button class="pgbtn" onclick="doSearch(${p})" ${p===currentPage?'aria-current="page"':''} aria-label="Página ${p}">${p}</button>`;
+  });
+  html+=`<button class="pgbtn" onclick="doSearch(${currentPage+1})" ${currentPage>=totalPages?'disabled':''} aria-label="Siguiente">›</button>`;
+  bar.innerHTML=html;
+}
+function pgRange(c,t){
+  if(t<=7) return Array.from({length:t},(_,i)=>i+1);
+  if(c<=4) return [1,2,3,4,5,'…',t];
+  if(c>=t-3) return [1,'…',t-4,t-3,t-2,t-1,t];
+  return [1,'…',c-1,c,c+1,'…',t];
+}
+
+// ===== RELEASE MODAL =====
+let lastFocus=null;
+async function openRelease(id, masterId, preTitle){
+  lastFocus=document.activeElement;
+  const modal=document.getElementById('relModal');
+  // Reset
+  document.getElementById('rmTitle').textContent=preTitle||T[lang]['loading'];
+  document.getElementById('rmArtist').textContent='';
+  document.getElementById('rmTags').innerHTML='';
+  document.getElementById('rmCover').innerHTML='<div class="rm-cover-ph"><div class="rm-cv" aria-hidden="true"></div></div>';
+  document.getElementById('rmPrice').innerHTML=`<span class="price-loading">${T[lang]['price.loading']}</span>`;
+  document.getElementById('rmBody').innerHTML=`<p style="padding:24px;color:var(--gray);font-size:12px;letter-spacing:2px;">${T[lang]['loading']}</p>`;
+  document.getElementById('rmFoot').innerHTML='';
+  modal.classList.add('on');
+  document.body.style.overflow='hidden';
+  modal.querySelector('.modal-x').focus();
+
+  try{
+    // Load release + marketplace in parallel
+    const releaseId=id;
+    const [relRes, priceRes] = await Promise.all([
+      fetch(`/api/search?action=release&id=${releaseId}`),
+      fetch(`/api/search?action=marketplace&id=${releaseId}`)
+    ]);
+    const d=relRes.ok?await relRes.json():{};
+    const priceData=priceRes.ok?await priceRes.json():{};
+    renderReleaseModal(d, priceData, masterId||d.master_id);
+  }catch(err){
+    document.getElementById('rmBody').innerHTML=`<div style="padding:20px;color:#f87171;font-size:13px;">Error: ${err.message}</div>`;
+    document.getElementById('rmPrice').innerHTML='';
+  }
+}
+
+function renderReleaseModal(d, priceData, masterId){
+  // Cover
+  const imgs=d.images||[];
+  const primary=imgs.find(i=>i.type==='primary')||imgs[0];
+  if(primary?.uri){
+    document.getElementById('rmCover').innerHTML=`<img src="${primary.uri}" alt="${escStr(d.title||'')}" style="width:100%;height:280px;object-fit:cover;display:block;" onerror="this.parentElement.innerHTML='<div class=\\'rm-cover-ph\\'><div class=\\'rm-cv\\'></div></div>'">`;
+  }
+
+  // Header
+  const artists=(d.artists||[]).map(a=>a.name.replace(/\s*\(\d+\)$/,'')).join(', ');
+  document.getElementById('rmArtist').textContent=artists;
+  document.getElementById('rmTitle').textContent=d.title||'—';
+
+  const genres=[...(d.genres||[]),...(d.styles||[])].slice(0,5);
+  const fmts=(d.formats||[]).map(f=>f.name+(f.descriptions?` (${f.descriptions.slice(0,2).join(', ')})`:''));
+  document.getElementById('rmTags').innerHTML=
+    genres.map(g=>`<span class="mtag mtag-o">${g}</span>`).join('')+
+    fmts.map(f=>`<span class="mtag mtag-g">${f}</span>`).join('');
+
+  // Price bar
+  const stats=priceData.num_for_sale!==undefined?priceData:null;
+  if(stats&&stats.num_for_sale>0){
+    const lo=stats.lowest_price?.value;
+    const med=stats.median_price?.value;
+    const hi=stats.highest_price?.value;
+    const cur=stats.lowest_price?.currency||'USD';
+    const fmt=v=>v!=null?`${cur} ${Number(v).toFixed(2)}`:'—';
+    document.getElementById('rmPrice').innerHTML=`
+      <div class="price-item"><p class="price-label">${T[lang]['price.min']}</p><p class="price-value">${fmt(lo)}</p></div>
+      <div class="price-divider" aria-hidden="true"></div>
+      <div class="price-item"><p class="price-label">${T[lang]['price.med']}</p><p class="price-value med">${fmt(med)}</p></div>
+      <div class="price-divider" aria-hidden="true"></div>
+      <div class="price-item"><p class="price-label">${T[lang]['price.max']}</p><p class="price-value hi">${fmt(hi)}</p></div>
+      <p class="for-sale"><strong>${stats.num_for_sale}</strong> ${T[lang]['price.sale']}</p>`;
+  }else{
+    document.getElementById('rmPrice').innerHTML=`<p class="price-na">${T[lang]['price.na']}</p>`;
+  }
+
+  // Body — info + tracklist + editions
+  const released=d.released_formatted||d.year||'';
+  const country=d.country||'';
+  const labels=(d.labels||[]);
+  const community=d.community||{};
+  const rating=community.rating||{};
+
+  let infoHTML=`<div class="info-grid">`;
+  if(released) infoHTML+=`<div><p class="ii-lbl">${T[lang]['col.year']}</p><p class="ii-val">${released}</p></div>`;
+  if(country) infoHTML+=`<div><p class="ii-lbl">${T[lang]['col.country']}</p><p class="ii-val">${country}</p></div>`;
+  if(labels.length) infoHTML+=`<div><p class="ii-lbl">${T[lang]['col.label']}</p><p class="ii-val">${labels.map(l=>l.name+(l.catno?' · '+l.catno:'')).join('<br>')}</p></div>`;
+  if(rating.count) infoHTML+=`<div><p class="ii-lbl">Rating</p><p class="ii-val">★ ${Number(rating.average||0).toFixed(2)} <span style="color:var(--gray);font-size:11px;">(${(rating.count||0).toLocaleString()} votos)</span></p></div>`;
+  if(community.want||community.have) infoHTML+=`<div><p class="ii-lbl">Want / Have</p><p class="ii-val">${community.want||0} quieren · ${community.have||0} tienen</p></div>`;
+  infoHTML+=`</div>`;
+
+  // Tracklist
+  const tracks=(d.tracklist||[]).filter(t=>t.type_!=='heading');
+  let tlHTML='';
+  if(tracks.length){
+    tlHTML+=`<hr class="mdiv"><h3 class="sec-head">${T[lang]['sec.tracklist']} (${tracks.length})</h3>`;
+    tlHTML+='<ol style="list-style:none;">';
+    tracks.slice(0,40).forEach(t=>{
+      tlHTML+=`<li class="track"><span class="track-pos" aria-hidden="true">${t.position||'·'}</span><span class="track-name">${t.title||''}</span>${t.duration?`<span class="track-dur">${t.duration}</span>`:''}</li>`;
+    });
+    tlHTML+='</ol>';
+    if(tracks.length>40) tlHTML+=`<p class="track-more">... y ${tracks.length-40} ${T[lang]['more.tracks']}</p>`;
+  }
+
+  document.getElementById('rmBody').innerHTML=infoHTML+tlHTML;
+
+  // Footer
+  document.getElementById('rmFoot').innerHTML=`
+    <a href="https://www.discogs.com/release/${d.id}" target="_blank" rel="noopener" class="btn-link">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="white" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="white"/></svg>
+      ${T[lang]['open.discogs']}
+    </a>
+    ${masterId?`<button class="btn-link btn-link-outline" onclick="loadEditions(${masterId})" id="editionsBtn">${T[lang]['sec.editions']} ↓</button>`:''}
+    <span style="font-size:11px;color:var(--gray);margin-left:auto;">ID: ${d.id}</span>`;
+
+  // Load editions if master exists
+  if(masterId) loadEditions(masterId);
+}
+
+async function loadEditions(masterId){
+  const btn=document.getElementById('editionsBtn');
+  if(btn) btn.disabled=true;
+  try{
+    const r=await fetch(`/api/search?action=master&master_id=${masterId}`);
+    if(!r.ok) return;
+    const data=await r.json();
+    const versions=(data.versions?.versions||[]).slice(0,30);
+    if(!versions.length) return;
+
+    const existing=document.getElementById('rmBody');
+    const edDiv=document.createElement('div');
+    edDiv.innerHTML=`<hr class="mdiv"><h3 class="sec-head">${T[lang]['sec.editions']} (${data.versions?.pagination?.items||versions.length})</h3>
+      <div class="editions-wrap"><table>
+        <thead><tr>
+          <th>${T[lang]['col.year']}</th>
+          <th>${T[lang]['col.country']}</th>
+          <th>${T[lang]['col.label']}</th>
+          <th>${T[lang]['col.format']}</th>
+        </tr></thead>
+        <tbody>${versions.map(v=>`<tr onclick="openRelease(${v.id},null,'${escStr(v.title||'')}')">
+          <td>${v.released||'—'}</td>
+          <td>${v.country||'—'}</td>
+          <td>${(v.label||'—')}</td>
+          <td>${(v.format||'—')}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+    existing.appendChild(edDiv);
+    if(btn){btn.textContent=T[lang]['sec.editions']+' ✓';btn.disabled=true;}
+  }catch(e){console.error('editions error',e);}
+}
+
+// ===== ARTIST MODAL =====
+async function openArtist(id, preTitle){
+  lastFocus=document.activeElement;
+  const modal=document.getElementById('artModal');
+  document.getElementById('amName').textContent=preTitle||T[lang]['loading'];
+  document.getElementById('amDesc').textContent='';
+  document.getElementById('amFacts').innerHTML='';
+  document.getElementById('amWiki').style.display='none';
+  document.getElementById('amPhoto').innerHTML='<div class="am-photo-ph" aria-hidden="true">🎸</div>';
+  document.getElementById('amBody').innerHTML=`<p style="padding:20px;color:var(--gray);font-size:12px;letter-spacing:2px;">${T[lang]['loading']}</p>`;
+  document.getElementById('amFoot').innerHTML='';
+  modal.classList.add('on');
+  document.body.style.overflow='hidden';
+  modal.querySelector('.modal-x').focus();
+
+  try{
+    // Load artist + wikidata in parallel
+    const [artRes, wikiRes] = await Promise.all([
+      fetch(`/api/search?action=artist&artist_id=${id}`),
+      fetch(`/api/search?action=wikidata&q=${encodeURIComponent(preTitle)}&lang=${lang}`)
+    ]);
+    const artData=artRes.ok?await artRes.json():{};
+    const wikiData=wikiRes.ok?await wikiRes.json():{};
+    renderArtistModal(artData, wikiData, preTitle);
+  }catch(err){
+    document.getElementById('amBody').innerHTML=`<div style="padding:20px;color:#f87171;font-size:13px;">Error: ${err.message}</div>`;
+  }
+}
+
+function renderArtistModal(data, wiki, preTitle){
+  const artist=data.artist||{};
+  const releases=data.releases||{};
+
+  // Photo
+  const imgs=artist.images||[];
+  const primary=imgs.find(i=>i.type==='primary')||imgs[0];
+  if(primary?.uri){
+    document.getElementById('amPhoto').innerHTML=`<img src="${primary.uri}" alt="${escStr(artist.name||preTitle)}" style="width:100%;height:220px;object-fit:cover;display:block;" onerror="this.parentElement.innerHTML='<div class=\\'am-photo-ph\\' aria-hidden=\\'true\\'>🎸</div>'">`;
+  }
+
+  // Name & bio
+  document.getElementById('amName').textContent=artist.name||preTitle;
+  const profile=(artist.profile||'').replace(/\[([^\]]+)=[^\]]+\]/g,'$1').replace(/\[([^\]]+)\]/g,'$1').substring(0,500);
+  document.getElementById('amDesc').textContent=profile+(profile.length>=500?'…':'');
+
+  // Facts from Discogs
+  const members=(artist.members||[]).map(m=>m.name).slice(0,6).join(', ');
+  const urls=(artist.urls||[]).slice(0,2);
+  let factsHTML='';
+  if(members) factsHTML+=`<div class="am-fact"><p class="am-fact-label">${T[lang]['members']}</p><p class="am-fact-val" style="font-size:12px;">${members}</p></div>`;
+
+  // Facts from Wikidata
+  if(wiki.found){
+    if(wiki.inception||wiki.dissolved){
+      const period=wiki.inception?`${wiki.inception}${wiki.dissolved?' — '+wiki.dissolved:''}`:wiki.dissolved;
+      if(period) factsHTML+=`<div class="am-fact"><p class="am-fact-label">${T[lang]['year.active']}</p><p class="am-fact-val">${period}</p></div>`;
+    }
+    if(wiki.description && !artist.profile){
+      document.getElementById('amDesc').textContent=wiki.description;
+    }
+
+    // Wiki note
+    const wikiEl=document.getElementById('amWiki');
+    let wikiLinks='';
+    if(wiki.wikipedia) wikiLinks+=`<a href="https://en.wikipedia.org/wiki/${encodeURIComponent(wiki.wikipedia)}" target="_blank" rel="noopener" class="btn-link btn-link-outline" style="padding:7px 14px;font-size:10px;">${T[lang]['open.wiki']}</a>`;
+    if(wiki.wikidataUrl) wikiLinks+=`<a href="${wiki.wikidataUrl}" target="_blank" rel="noopener" class="btn-link btn-link-outline" style="padding:7px 14px;font-size:10px;">${T[lang]['open.wikidata']}</a>`;
+    if(wikiLinks){
+      wikiEl.innerHTML=`<div class="am-wiki-note"><strong>${T[lang]['sec.wiki']}</strong><br><span style="font-size:11px;color:var(--gray);">${wiki.description||''}</span><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">${wikiLinks}</div></div>`;
+      wikiEl.style.display='block';
+    }
+  }
+  document.getElementById('amFacts').innerHTML=factsHTML;
+
+  // Discography grid
+  const rels=(releases.releases||[])
+    .filter(r=>r.role==='Main'||r.role==='Appearance'||!r.role)
+    .slice(0,60);
+
+  let discoHTML='';
+  if(rels.length){
+    discoHTML+=`<hr class="mdiv" style="margin:0 24px;"><div style="padding:16px 24px 0;"><h3 class="sec-head">${T[lang]['sec.disco']} (${(releases.pagination?.items||rels.length).toLocaleString()})</h3></div>`;
+    discoHTML+=`<div style="padding:0 24px 24px;"><div class="disco-grid">`;
+    rels.forEach(rel=>{
+      const thumb=rel.thumb||'';
+      discoHTML+=`<article class="disco-item" tabindex="0"
+        onclick="closeAllModals();setTimeout(()=>openRelease(${rel.id},${rel.master_id||'null'},'${escStr(rel.title||'')}'),200)"
+        onkeydown="if(event.key==='Enter'){closeAllModals();setTimeout(()=>openRelease(${rel.id},${rel.master_id||'null'},'${escStr(rel.title||'')}'),200)}"
+        aria-label="${escStr(rel.title||'')} ${rel.year||''}">
+        <div class="disco-item-cover">
+          ${thumb?`<img src="${thumb}" alt="${escStr(rel.title||'')}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'disco-item-ph\\'><div class=\\'disco-item-ph-v\\'></div></div>'">`:'<div class="disco-item-ph"><div class="disco-item-ph-v"></div></div>'}
+        </div>
+        <div class="disco-item-info">
+          <p class="disco-item-title">${escStr(rel.title||'')}</p>
+          <p class="disco-item-year">${rel.year||'—'}</p>
+          ${rel.role&&rel.role!=='Main'?`<p class="disco-item-role">${rel.role}</p>`:''}
+        </div>
+      </article>`;
+    });
+    discoHTML+=`</div></div>`;
+  }
+  document.getElementById('amBody').innerHTML=discoHTML||`<div style="padding:24px;color:var(--gray);font-size:13px;">Sin discografía disponible.</div>`;
+
+  // Footer
+  document.getElementById('amFoot').innerHTML=`
+    <a href="https://www.discogs.com/artist/${artist.id}" target="_blank" rel="noopener" class="btn-link">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="white" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="white"/></svg>
+      ${T[lang]['open.discogs']}
+    </a>`;
+}
+
+// ===== CLOSE MODALS =====
+function closeAllModals(e){
+  const relM=document.getElementById('relModal');
+  const artM=document.getElementById('artModal');
+  if(!e||e.target===relM||e.target===artM){
+    relM.classList.remove('on');
+    artM.classList.remove('on');
+    document.body.style.overflow='';
+    lastFocus?.focus();
+  }
+}
+</script>
+</body>
+</html>
