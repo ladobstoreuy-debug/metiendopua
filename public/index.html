@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Metiendo Púa — 70s 80s & 90s Rock & Pop en Vinilo</title>
-<meta name="description" content="Canal de YouTube con Rock y Pop clásico de los 70s, 80s y 90s reproducido desde vinilos y CDs originales. Buscador musical con Wikidata.">
+<meta name="description" content="Canal de YouTube con Rock y Pop clásico de los 70s, 80s y 90s reproducido desde vinilos y CDs originales.">
 <meta property="og:title" content="Metiendo Púa — 70s 80s & 90s Rock & Pop">
-<meta property="og:description" content="Música auténtica desde vinilos originales. Buscador musical gratuito con Wikidata.">
+<meta property="og:description" content="Música auténtica desde vinilos originales.">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -99,33 +99,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,0.
 .v-title{font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:1px;margin-bottom:6px;line-height:1.2;}
 .v-meta{font-size:11px;color:var(--gray);}
 
-/* WIKIDATA SEARCH */
-.wiki-search-box{background:var(--card);border:1px solid var(--border);padding:32px;}
-.wiki-search-row{display:flex;gap:10px;margin-bottom:16px;}
-.wiki-inp{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--white);font-family:'Montserrat',sans-serif;font-size:14px;padding:14px 18px;outline:none;transition:border-color 0.2s;}
-.wiki-inp:focus{border-color:var(--orange);}
-.wiki-inp::placeholder{color:var(--gray);}
-.wiki-btn{background:var(--orange);border:none;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:14px 24px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
-.wiki-btn:hover{background:#ff8533;}
-.wiki-btn:disabled{background:var(--border);cursor:not-allowed;}
-.wiki-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
-.chip{background:var(--card);border:1px solid var(--border);color:var(--gray2);font-size:12px;padding:7px 13px;cursor:pointer;transition:all 0.2s;}
-.chip:hover,.chip:focus-visible{border-color:var(--orange);color:var(--orange);background:var(--odim);}
-.wiki-status{font-size:12px;color:var(--gray);letter-spacing:1px;min-height:20px;margin-bottom:12px;}
-.wiki-results{display:flex;flex-direction:column;gap:12px;max-height:480px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
-.wiki-results::-webkit-scrollbar{width:4px;}
-.wiki-results::-webkit-scrollbar-thumb{background:var(--border);}
-.wiki-item{background:rgba(255,255,255,0.03);border:1px solid var(--border);padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;}
-.wi-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--white);margin-bottom:4px;}
-.wi-desc{font-size:12px;color:var(--gray2);line-height:1.6;}
-.wi-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
-.wi-badge{font-size:10px;font-weight:700;letter-spacing:2px;background:var(--odim);border:1px solid rgba(255,107,0,0.2);color:var(--orange);padding:3px 8px;}
-.wi-badge.dark{background:rgba(255,255,255,0.04);border-color:var(--border);color:var(--gray2);}
-.wi-link{color:var(--orange);font-size:11px;font-weight:700;letter-spacing:2px;text-decoration:none;white-space:nowrap;align-self:center;}
-.wi-link:hover{color:#ff8533;}
-.wiki-empty{text-align:center;padding:40px 20px;color:var(--gray);font-size:13px;}
-.wiki-info{background:var(--odim);border:1px solid rgba(255,107,0,0.2);padding:14px 18px;margin-bottom:20px;font-size:12px;color:var(--gray2);line-height:1.7;}
-.wiki-info strong{color:var(--orange);}
+
 
 /* ABOUT */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
@@ -182,7 +156,6 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:56px 4
   .sec-head{flex-direction:column;align-items:flex-start;}
   footer{padding:40px 24px 28px;}
   .foot-links{gap:16px;}
-  .wiki-search-row{flex-direction:column;}
 }
 </style>
 </head>
@@ -199,7 +172,7 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:56px 4
     <li><a href="index.html#videos">Videos</a></li>
     <li><a href="coleccion.html">Colección</a></li>
     <li><a href="buscar.html">Buscador</a></li>
-    <li><a href="index.html#buscador">Wikidata</a></li>
+    <li><a href="herramientas.html">Herramientas</a></li>
     <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal ↗</a></li>
   </ul>
   <div class="nav-right">
@@ -215,10 +188,11 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:56px 4
 
 <!-- MOBILE NAV -->
 <nav id="mobileNav" class="mobile-nav" aria-label="Menú móvil" aria-hidden="true">
-  <a href="index.html#videos" onclick="closeMenu()">Videos</a>
-  <a href="coleccion.html" onclick="closeMenu()">Colección</a>
-  <a href="buscar.html" onclick="closeMenu()">Buscador</a>
-  <a href="index.html#buscador" onclick="closeMenu()">Wikidata</a>
+  <a href="index.html#videos" onclick="closeMobileMenu()">Videos</a>
+  <a href="coleccion.html" onclick="closeMobileMenu()">Colección</a>
+  <a href="buscar.html" onclick="closeMobileMenu()">Buscador</a>
+  <a href="herramientas.html" onclick="closeMobileMenu()">Herramientas</a>
+  <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal ↗</a>
   <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal YouTube ↗</a>
   
   <div class="mobile-nav-footer">
@@ -242,7 +216,6 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:56px 4
     <p class="hero-sub" data-i18n="hero.sub">Música auténtica desde la colección personal. Rock y Pop clásico de los 70s, 80s y 90s en vinilo original — sin playlists, sin ediciones, tal como suena en casa.</p>
     <div class="hero-ctas">
       <a href="#videos" class="btn btn-fill" data-i18n="hero.cta1">Ver Videos</a>
-      <a href="#buscador" class="btn btn-outline" data-i18n="hero.cta2">Buscador Musical</a>
     </div>
     <div class="hero-stats" aria-label="Estadísticas del canal">
       <div><div class="stat-n" aria-label="70s">70s</div><div class="stat-l" data-i18n="stat.s1">Rock Clásico</div></div>
@@ -267,37 +240,7 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:56px 4
   </div>
 </section>
 
-<!-- WIKIDATA SEARCH -->
-<section id="buscador" aria-labelledby="search-heading">
-  <div class="sec-wrap">
-    <div class="sec-head">
-      <div>
-        <p class="sec-label" aria-hidden="true" data-i18n="wiki.label">Base de Datos Musical</p>
-        <h2 id="search-heading" class="sec-title" data-i18n="wiki.title">BUSCADOR WIKIDATA</h2>
-      </div>
-    </div>
-    <div class="wiki-info" role="note">
-      <strong data-i18n="wiki.note.title">100% gratuito —</strong> <span data-i18n="wiki.note.text">Este buscador consulta directamente Wikidata, la base de datos libre de Wikipedia. Sin costo, sin registro. Encontrá información sobre artistas, álbumes, sellos y más.</span>
-    </div>
-    <div class="wiki-search-box">
-      <div class="wiki-search-row">
-        <label for="wikiInp" class="sr-only" data-i18n="wiki.label.input">Buscar artista o álbum</label>
-        <input type="search" id="wikiInp" class="wiki-inp" placeholder="Ej: Pink Floyd, Thriller, Led Zeppelin..." aria-label="Buscar en Wikidata" onkeydown="if(event.key==='Enter')doSearch()"/>
-        <button class="wiki-btn" id="wikiBtn" onclick="doSearch()" aria-label="Buscar" data-i18n="wiki.btn">BUSCAR</button>
-      </div>
-      <div class="wiki-chips" role="list" aria-label="Búsquedas de ejemplo">
-        <button class="chip" role="listitem" onclick="quickSearch('Pink Floyd')" aria-label="Buscar Pink Floyd">Pink Floyd</button>
-        <button class="chip" role="listitem" onclick="quickSearch('The Beatles')" aria-label="Buscar The Beatles">The Beatles</button>
-        <button class="chip" role="listitem" onclick="quickSearch('Fleetwood Mac')" aria-label="Buscar Fleetwood Mac">Fleetwood Mac</button>
-        <button class="chip" role="listitem" onclick="quickSearch('Led Zeppelin')" aria-label="Buscar Led Zeppelin">Led Zeppelin</button>
-        <button class="chip" role="listitem" onclick="quickSearch('David Bowie')" aria-label="Buscar David Bowie">David Bowie</button>
-        <button class="chip" role="listitem" onclick="quickSearch('Queen')" aria-label="Buscar Queen">Queen</button>
-      </div>
-      <p class="wiki-status" id="wikiStatus" aria-live="polite" aria-atomic="true"></p>
-      <div id="wikiResults" class="wiki-results" role="region" aria-label="Resultados de búsqueda" aria-live="polite"></div>
-    </div>
-  </div>
-</section>
+
 
 <!-- SOBRE -->
 <section id="sobre" aria-labelledby="about-heading" class="full-bg" style="padding:96px 0;">
@@ -349,7 +292,6 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:56px 4
   <ul class="foot-links" role="list">
     <li><a href="#videos" data-i18n="nav.videos">Videos</a></li>
     <li><a href="coleccion.html" data-i18n="nav.col">Colección</a></li>
-    <li><a href="#buscador" data-i18n="nav.search">Buscador</a></li>
     <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">YouTube ↗</a></li>
   </ul>
   <p class="foot-copy" data-i18n="foot.copy">© 2025 Metiendo Púa — Uruguay</p>
@@ -379,18 +321,14 @@ const T={
     'hero.cta1':'Ver Videos','hero.cta2':'Buscador Musical',
     'stat.s1':'Rock Clásico','stat.s2':'Pop & New Wave','stat.s3':'Alternativo','stat.s4':'Vinilo Original',
     'vid.label':'Últimos Videos','vid.title':'COLECCIÓN EN VIVO','vid.all':'Ver Canal Completo ↗',
-    'wiki.label':'Base de Datos Musical','wiki.title':'BUSCADOR WIKIDATA',
-    'wiki.note.title':'100% gratuito —','wiki.note.text':'Este buscador consulta directamente Wikidata, la base de datos libre de Wikipedia. Sin costo, sin registro.',
-    'wiki.btn':'BUSCAR','wiki.label.input':'Buscar artista o álbum',
-    'about.label':'El Canal','about.title':'SOBRE METIENDO PÚA',
+                'about.label':'El Canal','about.title':'SOBRE METIENDO PÚA',
     'about.p1':'Metiendo Púa nació de la pasión por la música analógica. Cada video es una sesión en tiempo real — sin edición, sin playlists, exactamente como suena con la aguja en el surco.',
     'about.p2':'El canal es para coleccionistas, audiófilos y nostalgiosos que crecieron con un Walkman, grababan canciones de la radio, o simplemente aman el sonido cálido del vinilo.',
     'feat.1t':'Selección auténtica','feat.1s':'Hits, caras B, versiones extendidas y tesoros olvidados.',
     'feat.2t':'Colección física','feat.2s':'Vinilos y CDs reales. Sin streaming, sin edición digital.',
     'feat.3t':'Sonido analógico','feat.3s':'La música como fue pensada originalmente.',
     'foot.copy':'© 2025 Metiendo Púa — Uruguay',
-    'search.searching':'Buscando en Wikidata...','search.found':'resultados encontrados','search.none':'No se encontraron resultados para','search.error':'Error al consultar Wikidata. Intentá de nuevo.',
-    'open.wiki':'Ver en Wikidata ↗',
+        'open.wiki':'Ver en Wikidata ↗',
   },
   en:{
     'nav.videos':'Videos','nav.col':'Collection','nav.search':'Music Search','nav.about':'About','nav.tools':'Tools','nav.yt':'Channel ↗',
@@ -399,18 +337,14 @@ const T={
     'hero.cta1':'Watch Videos','hero.cta2':'Music Search',
     'stat.s1':'Classic Rock','stat.s2':'Pop & New Wave','stat.s3':'Alternative','stat.s4':'Original Vinyl',
     'vid.label':'Latest Videos','vid.title':'LIVE COLLECTION','vid.all':'View Full Channel ↗',
-    'wiki.label':'Music Database','wiki.title':'WIKIDATA SEARCH',
-    'wiki.note.title':'100% free —','wiki.note.text':'This search queries Wikidata directly, the free knowledge base from Wikipedia. No cost, no registration.',
-    'wiki.btn':'SEARCH','wiki.label.input':'Search artist or album',
-    'about.label':'The Channel','about.title':'ABOUT METIENDO PÚA',
+                'about.label':'The Channel','about.title':'ABOUT METIENDO PÚA',
     'about.p1':'Metiendo Púa was born from a passion for analog music. Every video is a real-time session — unedited, no pre-made playlists, exactly as it sounds with the needle on the groove.',
     'about.p2':'The channel is for collectors, audiophiles and nostalgic people who grew up with a Walkman, recorded songs off the radio, or simply love the warm sound of vinyl.',
     'feat.1t':'Authentic selection','feat.1s':'Hits, B-sides, extended versions and forgotten treasures.',
     'feat.2t':'Physical collection','feat.2s':'Real vinyl and CDs. No streaming, no digital editing.',
     'feat.3t':'Analog sound','feat.3s':'Music as it was originally intended.',
     'foot.copy':'© 2025 Metiendo Púa — Uruguay',
-    'search.searching':'Searching Wikidata...','search.found':'results found','search.none':'No results found for','search.error':'Error querying Wikidata. Please try again.',
-    'open.wiki':'View on Wikidata ↗',
+        'open.wiki':'View on Wikidata ↗',
   }
 };
 let lang='es';
@@ -503,97 +437,3 @@ function closeModal(e){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
-// ===== WIKIDATA SEARCH =====
-async function doSearch(){
-  const q=document.getElementById('wikiInp').value.trim();
-  if(!q) return;
-  quickSearch(q);
-}
-function quickSearch(q){
-  document.getElementById('wikiInp').value=q;
-  searchWikidata(q);
-}
-
-async function searchWikidata(q){
-  const status=document.getElementById('wikiStatus');
-  const results=document.getElementById('wikiResults');
-  const btn=document.getElementById('wikiBtn');
-  status.textContent=T[lang]['search.searching'];
-  results.innerHTML='';
-  btn.disabled=true;
-
-  // Use Wikidata search API — free, no auth needed
-  try{
-    // Search entities
-    const searchUrl=`https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(q)}&language=${lang}&uselang=${lang}&type=item&limit=10&format=json&origin=*`;
-    const r=await fetch(searchUrl,{signal:AbortSignal.timeout(8000)});
-    const data=await r.json();
-    const items=(data.search||[]);
-
-    if(!items.length){
-      status.textContent=`${T[lang]['search.none']} "${q}"`;
-      results.innerHTML=`<div class="wiki-empty" role="alert">🎵 ${T[lang]['search.none']} "${q}"</div>`;
-      btn.disabled=false;
-      return;
-    }
-
-    // Get details for each item
-    const ids=items.map(i=>i.id).join('|');
-    const detailUrl=`https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${ids}&languages=${lang}|en&props=labels|descriptions|claims&format=json&origin=*`;
-    const dr=await fetch(detailUrl,{signal:AbortSignal.timeout(8000)});
-    const detail=await dr.json();
-
-    status.textContent=`${items.length} ${T[lang]['search.found']}`;
-    results.innerHTML='';
-
-    items.forEach(item=>{
-      const entity=detail.entities?.[item.id]||{};
-      const label=entity.labels?.[lang]?.value||entity.labels?.en?.value||item.label||item.id;
-      const desc=entity.descriptions?.[lang]?.value||entity.descriptions?.en?.value||item.description||'';
-      const claims=entity.claims||{};
-
-      // Extract useful properties
-      const badges=[];
-      // P31 = instance of
-      const instanceOf=(claims.P31||[]).map(c=>c.mainsnak?.datavalue?.value?.id).filter(Boolean);
-      // P136 = genre
-      const genres=(claims.P136||[]).map(c=>c.mainsnak?.datavalue?.value?.id).filter(Boolean);
-      // P571 = inception/founded
-      const inception=(claims.P571||[])[0]?.mainsnak?.datavalue?.value?.time;
-      const year=inception?inception.substring(1,5):'';
-      // P27 = country of citizenship / P17 = country
-      const country=(claims.P27||claims.P17||[])[0]?.mainsnak?.datavalue?.value?.id;
-
-      if(year) badges.push({text:year,dark:false});
-      if(desc && desc.length<80) badges.push({text:desc,dark:true});
-
-      const wikiUrl=`https://www.wikidata.org/wiki/${item.id}`;
-      const wpUrl=item.url||'';
-
-      const div=document.createElement('article');
-      div.className='wiki-item';
-      div.setAttribute('aria-label',label);
-      div.innerHTML=`
-        <div>
-          <h3 class="wi-title">${label}</h3>
-          ${desc?`<p class="wi-desc">${desc}</p>`:''}
-          <div class="wi-badges" aria-label="Etiquetas">
-            ${badges.map(b=>`<span class="wi-badge${b.dark?' dark':''}">${b.text}</span>`).join('')}
-          </div>
-        </div>
-        <a href="${wikiUrl}" target="_blank" rel="noopener" class="wi-link" aria-label="Ver ${label} en Wikidata">${T[lang]['open.wiki']}</a>`;
-      results.appendChild(div);
-    });
-
-  }catch(err){
-    status.textContent=T[lang]['search.error'];
-    results.innerHTML=`<div class="wiki-empty" role="alert">⚠️ ${T[lang]['search.error']}</div>`;
-  }
-  btn.disabled=false;
-}
-
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded',()=>{loadVideos();});
-</script>
-</body>
-</html>

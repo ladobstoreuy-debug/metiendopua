@@ -8,7 +8,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: http:; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; connect-src 'self' https://www.googleapis.com https://api.anthropic.com https://query.wikidata.org https://www.wikidata.org https://api.discogs.com https://api.allorigins.win https://www.youtube.com https://img.youtube.com; media-src 'self' https://www.youtube.com;"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: http:; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; connect-src 'self' https://*.wikipedia.org https://www.wikidata.org https://query.wikidata.org https://api.discogs.com https://www.googleapis.com https://www.googleapis.com https://api.anthropic.com https://query.wikidata.org https://www.wikidata.org https://api.discogs.com https://api.allorigins.win https://www.youtube.com https://img.youtube.com; media-src 'self' https://www.youtube.com;"
         },
         {
           "key": "X-Frame-Options",
@@ -41,6 +41,14 @@
     {
       "source": "/search",
       "destination": "/buscar.html"
+    },
+    {
+      "source": "/herramientas",
+      "destination": "/herramientas.html"
+    },
+    {
+      "source": "/tools",
+      "destination": "/herramientas.html"
     }
   ]
 }

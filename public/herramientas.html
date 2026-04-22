@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Herramientas — Metiendo Púa</title>
-<meta name="description" content="Herramientas para gestionar tu colección de Discogs. Generá un CSV con las compras que no están en tu colección.">
+<meta name="description" content="Descargá la discografía de cualquier artista como CSV. Herramientas para coleccionistas.">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--black:#0A0A0A;--dark:#111;--card:#161616;--border:#222;--orange:#FF6B00;--odim:rgba(255,107,0,0.12);--white:#fff;--gray:#888;--gray2:#bbb;--red:#C8102E;}
+:root{--black:#0A0A0A;--dark:#111;--card:#161616;--border:#222;--orange:#FF6B00;--odim:rgba(255,107,0,0.12);--white:#fff;--gray:#888;--gray2:#bbb;--red:#C8102E;--green:#22c55e;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 .skip-link{position:absolute;top:-100px;left:16px;background:var(--orange);color:#fff;padding:10px 18px;font-weight:700;font-size:13px;letter-spacing:2px;text-decoration:none;z-index:99999;transition:top 0.2s;}
@@ -41,92 +41,77 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,0.
 .mobile-nav-footer{margin-top:auto;padding-top:24px;display:flex;gap:8px;}
 
 /* PAGE HERO */
-.page-hero{padding:120px 60px 56px;background:var(--dark);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
-.page-hero::after{content:'';position:absolute;right:-200px;top:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,0,0.06) 0%,transparent 70%);pointer-events:none;}
-.page-hero-inner{max-width:1200px;margin:0 auto;}
-.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:11px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;}
+.page-hero{padding:120px 60px 48px;background:var(--dark);border-bottom:1px solid var(--border);}
+.hero-inner{max-width:800px;margin:0 auto;}
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:11px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;}
 .breadcrumb a{color:var(--gray);text-decoration:none;transition:color 0.2s;}
 .breadcrumb a:hover{color:var(--orange);}
 .breadcrumb span{color:var(--orange);}
-.page-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,7vw,84px);letter-spacing:2px;line-height:0.9;margin-bottom:14px;}
+.page-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,80px);letter-spacing:2px;line-height:0.9;margin-bottom:12px;}
 .page-h1 em{color:var(--orange);font-style:normal;}
-.page-sub{font-size:14px;color:var(--gray2);max-width:520px;line-height:1.8;}
+.page-sub{font-size:13px;color:var(--gray2);line-height:1.8;max-width:520px;}
 
 /* MAIN CONTENT */
-.content{max-width:1200px;margin:0 auto;padding:60px 60px 100px;}
+.content{max-width:800px;margin:0 auto;padding:52px 60px 100px;}
 
-/* SECURITY BADGE */
-.sec-badge{display:inline-flex;align-items:center;gap:10px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);color:#86efac;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:8px 16px;margin-bottom:32px;}
-.sec-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,0.6);animation:blink 2s infinite;flex-shrink:0;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+/* TOOL CARD */
+.tool-card{background:var(--card);border:1px solid var(--border);padding:32px;margin-bottom:20px;}
+.tool-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:10px;}
+.tool-title span{color:var(--orange);}
+.tool-desc{font-size:13px;color:var(--gray2);line-height:1.8;margin-bottom:24px;}
+.tool-desc strong{color:var(--white);}
 
-/* STEPS */
-.steps{display:flex;flex-direction:column;gap:24px;margin-bottom:40px;}
-.step{background:var(--card);border:1px solid var(--border);padding:28px 32px;display:grid;grid-template-columns:56px 1fr;gap:20px;align-items:start;transition:border-color 0.2s;}
-.step.active{border-color:var(--orange);}
-.step.done{border-color:rgba(34,197,94,0.4);}
-.step-num{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--border);line-height:1;transition:color 0.2s;}
-.step.active .step-num{color:var(--orange);}
-.step.done .step-num{color:#22c55e;}
-.step-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;margin-bottom:10px;}
-.step-desc{font-size:12px;color:var(--gray2);line-height:1.8;margin-bottom:14px;}
-.step-desc strong{color:var(--orange);}
-.step-desc a{color:var(--orange);text-decoration:none;}
-.step-desc a:hover{text-decoration:underline;}
-
-/* FORM ELEMENTS */
-label.field-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gray);display:block;margin-bottom:8px;}
-.inp-wrap{position:relative;display:flex;gap:10px;}
-input[type=password],input[type=text]{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--white);font-family:'Montserrat',sans-serif;font-size:13px;padding:12px 16px;outline:none;transition:border-color 0.2s;}
-input:focus{border-color:var(--orange);}
-input::placeholder{color:var(--gray);}
-.toggle-vis{background:transparent;border:1px solid var(--border);color:var(--gray);padding:12px 14px;cursor:pointer;font-size:13px;transition:all 0.2s;white-space:nowrap;}
-.toggle-vis:hover{border-color:var(--orange);color:var(--orange);}
-
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:8px;background:var(--orange);border:none;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:13px 28px;cursor:pointer;transition:all 0.2s;}
-.btn:hover{background:#ff8533;box-shadow:0 0 24px rgba(255,107,0,0.35);}
+/* FORM */
+.field-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gray);display:block;margin-bottom:8px;}
+.inp-row{display:flex;gap:0;margin-bottom:16px;}
+.inp{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-right:none;color:var(--white);font-family:'Montserrat',sans-serif;font-size:14px;padding:13px 16px;outline:none;transition:border-color 0.2s;}
+.inp:focus{border-color:var(--orange);}
+.inp::placeholder{color:var(--gray);}
+.btn{background:var(--orange);border:none;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:13px 24px;cursor:pointer;transition:all 0.2s;white-space:nowrap;display:inline-flex;align-items:center;gap:8px;}
+.btn:hover{background:#ff8533;box-shadow:0 0 24px rgba(255,107,0,0.3);}
 .btn:disabled{background:var(--border);cursor:not-allowed;box-shadow:none;}
-.btn-outline{background:transparent;border:1px solid var(--orange);color:var(--orange);}
-.btn-outline:hover{background:var(--orange);color:#fff;}
-.btn-sm{padding:9px 18px;font-size:11px;}
 .btn-green{background:#16a34a;}
 .btn-green:hover{background:#15803d;}
 
+/* STATUS */
+.status-wrap{margin:16px 0;min-height:40px;}
+.status-msg{display:flex;align-items:center;gap:10px;padding:12px 16px;font-size:12px;font-weight:600;letter-spacing:1px;border:1px solid;}
+.status-ok{color:var(--green);border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.06);}
+.status-err{color:#f87171;border-color:rgba(248,113,113,0.3);background:rgba(248,113,113,0.06);}
+.status-info{color:var(--gray2);border-color:var(--border);background:rgba(255,255,255,0.03);}
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.status-ok .status-dot{background:var(--green);}
+.status-err .status-dot{background:#f87171;}
+.status-info .status-dot{background:var(--gray);animation:blink 1.2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
 /* PROGRESS */
-.progress-wrap{margin-top:20px;display:none;}
-.prog-outer{background:var(--border);height:4px;border-radius:2px;overflow:hidden;margin-bottom:10px;}
+.prog-outer{background:var(--border);height:4px;border-radius:2px;overflow:hidden;margin-bottom:8px;display:none;}
 .prog-inner{height:100%;background:var(--orange);transition:width 0.4s;width:0%;}
 .prog-text{font-size:11px;color:var(--gray);letter-spacing:2px;}
-.log-box{background:rgba(0,0,0,0.5);border:1px solid var(--border);padding:14px 16px;margin-top:12px;max-height:180px;overflow-y:auto;font-size:11px;color:var(--gray2);line-height:1.9;font-family:'Courier New',monospace;display:none;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
-.log-box::-webkit-scrollbar{width:4px;}
-.log-box::-webkit-scrollbar-thumb{background:var(--border);}
-.log-ok{color:#86efac;}
-.log-warn{color:#fbbf24;}
-.log-err{color:#f87171;}
 
-/* RESULTS */
-.results{display:none;margin-top:32px;}
-.stat-row{display:flex;gap:16px;margin-bottom:28px;flex-wrap:wrap;}
-.stat-box{background:var(--odim);border:1px solid rgba(255,107,0,0.2);padding:16px 20px;flex:1;min-width:110px;}
-.stat-box.green{background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.25);}
-.stat-n{font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--orange);line-height:1;}
-.stat-box.green .stat-n{color:#86efac;}
-.stat-l{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:4px;}
-.tbl-wrap{overflow-x:auto;margin-bottom:20px;border:1px solid var(--border);}
+/* PREVIEW TABLE */
+.preview-wrap{display:none;margin-top:24px;}
+.preview-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:12px;}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--border);margin-bottom:20px;}
 table{width:100%;border-collapse:collapse;font-size:12px;}
-thead th{text-align:left;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);padding:10px 12px;border-bottom:1px solid var(--border);background:rgba(255,107,0,0.05);white-space:nowrap;}
-tbody tr{border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.15s;}
+thead th{text-align:left;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--orange);padding:10px 12px;border-bottom:1px solid var(--border);background:rgba(255,107,0,0.04);white-space:nowrap;}
+tbody tr{border-bottom:1px solid rgba(255,255,255,0.04);}
 tbody tr:hover{background:rgba(255,255,255,0.03);}
-tbody td{padding:10px 12px;color:var(--gray2);vertical-align:middle;}
+tbody td{padding:9px 12px;color:var(--gray2);vertical-align:middle;white-space:nowrap;}
 tbody td:first-child{color:var(--white);font-weight:600;}
-td a{color:var(--orange);text-decoration:none;}
-td a:hover{text-decoration:underline;}
-.empty-msg{text-align:center;padding:48px;color:var(--gray);}
-.empty-msg .ei{font-size:48px;margin-bottom:16px;}
+.stat-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;}
+.stat-box{background:var(--odim);border:1px solid rgba(255,107,0,0.2);padding:14px 18px;flex:1;min-width:100px;}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--orange);line-height:1;}
+.stat-l{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:3px;}
 .action-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
-.csv-note{font-size:12px;color:var(--gray);line-height:1.7;margin-top:12px;}
-.csv-note strong{color:var(--orange);}
+.hint{font-size:12px;color:var(--gray);line-height:1.7;margin-top:12px;}
+.hint strong{color:var(--orange);}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.chip{background:var(--card);border:1px solid var(--border);color:var(--gray2);font-size:12px;padding:6px 13px;cursor:pointer;transition:all 0.2s;}
+.chip:hover,.chip:focus-visible{border-color:var(--orange);color:var(--orange);background:var(--odim);}
 
 /* FOOTER */
 footer{background:var(--black);border-top:1px solid var(--border);padding:48px 40px 32px;text-align:center;}
@@ -142,10 +127,9 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
   nav{padding:0 20px;}
   .nav-links{display:none;}
   .menu-btn{display:flex;}
-  .page-hero{padding:100px 24px 40px;}
-  .content{padding:40px 24px 60px;}
-  .step{grid-template-columns:1fr;gap:10px;}
-  .step-num{font-size:28px;}
+  .page-hero,.content{padding-left:24px;padding-right:24px;}
+  .inp-row{flex-direction:column;}
+  .inp{border-right:1px solid var(--border);border-bottom:none;}
   footer{padding:36px 24px 24px;}
 }
 </style>
@@ -153,7 +137,6 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
 <body>
 <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-<!-- NAV -->
 <nav role="navigation" aria-label="Navegación principal">
   <a href="index.html" class="nav-logo" aria-label="Metiendo Púa - Inicio">
     <div class="pua" aria-hidden="true"></div>
@@ -162,7 +145,7 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
   <ul class="nav-links" role="list">
     <li><a href="index.html#videos">Videos</a></li>
     <li><a href="coleccion.html">Colección</a></li>
-    <li><a href="index.html#buscador">Buscador Musical</a></li>
+    <li><a href="buscar.html">Buscador</a></li>
     <li><a href="herramientas.html" aria-current="page">Herramientas</a></li>
     <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal ↗</a></li>
   </ul>
@@ -180,9 +163,9 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
 <nav id="mobileNav" class="mobile-nav" aria-label="Menú móvil" aria-hidden="true">
   <a href="index.html#videos" onclick="closeMenu()">Videos</a>
   <a href="coleccion.html" onclick="closeMenu()">Colección</a>
-  <a href="index.html#buscador" onclick="closeMenu()">Buscador Musical</a>
+  <a href="buscar.html" onclick="closeMenu()">Buscador</a>
   <a href="herramientas.html" aria-current="page">Herramientas</a>
-  <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal YouTube ↗</a>
+  <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal ↗</a>
   <div class="mobile-nav-footer">
     <button class="lbtn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
     <button class="lbtn" aria-pressed="false" onclick="setLang('en')" lang="en">EN</button>
@@ -191,500 +174,268 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
 
 <main id="main-content">
 
-<!-- HERO -->
-<header class="page-hero">
-  <div class="page-hero-inner">
+<div class="page-hero">
+  <div class="hero-inner">
     <nav class="breadcrumb" aria-label="Ubicación">
       <a href="index.html">Metiendo Púa</a>
       <span aria-hidden="true">›</span>
-      <span aria-current="page" data-i18n="bc">Herramientas</span>
+      <span aria-current="page">Herramientas</span>
     </nav>
-    <h1 class="page-h1"><em data-i18n="h1a">HERRAMIENTAS</em> <span data-i18n="h1b">DISCOGS</span></h1>
-    <p class="page-sub" data-i18n="hero.sub">Utilidades para gestionar tu colección. Encontrá las compras que no están agregadas y generá el CSV de importación.</p>
+    <h1 class="page-h1"><em>DISCOGRAFÍA</em> EN CSV</h1>
+    <p class="page-sub">Buscá un artista y descargá su discografía completa desde Discogs en formato CSV listo para Excel o Google Sheets.</p>
   </div>
-</header>
+</div>
 
-<!-- CONTENT -->
 <div class="content">
+  <div class="tool-card">
+    <h2 class="tool-title">EXPORTAR <span>DISCOGRAFÍA</span></h2>
+    <p class="tool-desc">
+      Ingresá el nombre de un artista. El sistema busca en Discogs y descarga todos sus lanzamientos como CSV.<br>
+      <strong>Incluye:</strong> título, año, formato, sello, número de catálogo, país y rol del artista.
+    </p>
 
-  <div class="sec-badge" role="note">
-    <div class="sec-dot" aria-hidden="true"></div>
-    <span data-i18n="sec.badge">🔒 Tu token nunca sale de tu navegador — procesamiento 100% local</span>
-  </div>
-
-  <div class="steps" role="list">
-
-    <!-- STEP 1 -->
-    <div class="step active" id="step1" role="listitem">
-      <div class="step-num" aria-hidden="true">1</div>
-      <div>
-        <h2 class="step-title" data-i18n="s1.title">INGRESÁ TU TOKEN DE DISCOGS</h2>
-        <p class="step-desc" data-i18n="s1.desc">
-          Conseguilo en <a href="https://www.discogs.com/settings/developers" target="_blank" rel="noopener">discogs.com → Settings → Developers → Generate new token</a>.
-          El token se usa solo en tu navegador para llamar a la API de Discogs — nunca se envía a ningún servidor externo.
-        </p>
-        <label class="field-label" for="tokenInp" data-i18n="s1.label">Token de Discogs</label>
-        <div class="inp-wrap">
-          <input type="password" id="tokenInp" placeholder="Pegá tu token acá..." aria-describedby="tokenHint" autocomplete="off"/>
-          <button class="toggle-vis" onclick="toggleVis()" aria-label="Mostrar u ocultar token" id="visBtn">👁 VER</button>
-        </div>
-        <p id="tokenHint" class="sr-only">Tu token de Discogs para autenticar las llamadas a la API</p>
-      </div>
+    <div class="chips" role="list" aria-label="Artistas sugeridos">
+      <button class="chip" onclick="setArtist('Pink Floyd')">Pink Floyd</button>
+      <button class="chip" onclick="setArtist('Led Zeppelin')">Led Zeppelin</button>
+      <button class="chip" onclick="setArtist('David Bowie')">David Bowie</button>
+      <button class="chip" onclick="setArtist('Fleetwood Mac')">Fleetwood Mac</button>
+      <button class="chip" onclick="setArtist('The Beatles')">The Beatles</button>
     </div>
 
-    <!-- STEP 2 -->
-    <div class="step" id="step2" role="listitem">
-      <div class="step-num" aria-hidden="true">2</div>
-      <div>
-        <h2 class="step-title" data-i18n="s2.title">ANALIZÁ TU CUENTA</h2>
-        <p class="step-desc" data-i18n="s2.desc">
-          El proceso lee tu historial de compras y tu colección completa, los compara y lista los discos que compraste pero nunca agregaste a la colección.
-          Puede tardar unos minutos si tenés muchas compras — Discogs limita las requests por segundo.
-        </p>
-        <button class="btn" id="startBtn" onclick="startProcess()" aria-describedby="analyzeDesc">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke="white" stroke-width="2" fill="none"/></svg>
-          <span data-i18n="s2.btn">ANALIZAR MI CUENTA</span>
+    <label class="field-label" for="artistInp">Nombre del artista</label>
+    <div class="inp-row">
+      <input type="search" id="artistInp" class="inp"
+        placeholder="Ej: Pink Floyd, Led Zeppelin, AC/DC..."
+        onkeydown="if(event.key==='Enter')startExport()"/>
+      <button class="btn" id="exportBtn" onclick="startExport()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        GENERAR CSV
+      </button>
+    </div>
+
+    <div class="status-wrap" id="statusWrap" aria-live="polite"></div>
+
+    <div class="prog-outer" id="progOuter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="prog-inner" id="progInner"></div>
+    </div>
+    <p class="prog-text" id="progText" style="display:none;"></p>
+
+    <div class="preview-wrap" id="previewWrap">
+      <div class="stat-row" id="statRow" role="list"></div>
+      <p class="preview-title">VISTA PREVIA — PRIMEROS 10 LANZAMIENTOS</p>
+      <div class="tbl-scroll" id="tblWrap"></div>
+      <div class="action-row">
+        <button class="btn btn-green" id="dlBtn" onclick="downloadCSV()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+          DESCARGAR CSV COMPLETO
         </button>
-        <p id="analyzeDesc" class="sr-only">Inicia el análisis de compras vs colección en Discogs</p>
-
-        <div class="progress-wrap" id="progressWrap" role="status" aria-live="polite" aria-atomic="false">
-          <div class="prog-outer" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progBar" aria-label="Progreso del análisis">
-            <div class="prog-inner" id="progInner"></div>
-          </div>
-          <p class="prog-text" id="progText">Iniciando...</p>
-          <div class="log-box" id="logBox" aria-label="Registro de actividad" role="log" aria-live="polite"></div>
-        </div>
       </div>
+      <p class="hint" id="hintTxt"></p>
     </div>
-
-    <!-- STEP 3 -->
-    <div class="step" id="step3" role="listitem">
-      <div class="step-num" aria-hidden="true">3</div>
-      <div>
-        <h2 class="step-title" data-i18n="s3.title">RESULTADOS Y DESCARGA</h2>
-        <p class="step-desc" data-i18n="s3.desc">
-          Una vez completado el análisis, vas a ver la lista de discos faltantes y podrás descargar el CSV para importar directamente en Discogs.
-        </p>
-
-        <div class="results" id="resultsWrap" aria-live="polite">
-
-          <div class="stat-row" id="statRow" role="list" aria-label="Estadísticas"></div>
-
-          <div class="tbl-wrap" id="tblWrap" role="region" aria-label="Discos faltantes en colección"></div>
-
-          <div class="action-row" id="actionRow" style="display:none;">
-            <button class="btn btn-green" onclick="downloadCSV()" aria-label="Descargar CSV para importar en Discogs">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-              <span data-i18n="dl.csv">DESCARGAR CSV</span>
-            </button>
-            <button class="btn btn-outline btn-sm" onclick="copyIds()" id="copyBtn" aria-label="Copiar Release IDs al portapapeles">
-              <span data-i18n="dl.copy">COPIAR IDs</span>
-            </button>
-          </div>
-
-          <p class="csv-note" id="csvNote" style="display:none;">
-            <strong data-i18n="note.title">Cómo importar el CSV:</strong>
-            <span data-i18n="note.steps"> discogs.com → tu perfil → Collection → Import/Export → Upload CSV → seleccioná el archivo descargado.</span>
-          </p>
-
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
 </main>
 
-<!-- FOOTER -->
 <footer role="contentinfo">
   <p class="foot-logo" aria-label="Metiendo Púa">METIENDO <span>PÚA</span></p>
   <p class="foot-tag">70s · 80s · 90s Rock & Pop en Vinilo — Uruguay</p>
   <ul class="foot-links" role="list">
     <li><a href="index.html">Inicio</a></li>
     <li><a href="coleccion.html">Colección</a></li>
-    <li><a href="herramientas.html" aria-current="page">Herramientas</a></li>
+    <li><a href="buscar.html">Buscador</a></li>
     <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">YouTube ↗</a></li>
   </ul>
   <p class="foot-copy">© 2025 Metiendo Púa — Uruguay</p>
 </footer>
 
 <script>
-// ===== I18N =====
-const T={
-  es:{
-    'bc':'Herramientas','h1a':'HERRAMIENTAS','h1b':'DISCOGS',
-    'hero.sub':'Utilidades para gestionar tu colección. Encontrá las compras que no están agregadas y generá el CSV de importación.',
-    'sec.badge':'🔒 Tu token nunca sale de tu navegador — procesamiento 100% local',
-    's1.title':'INGRESÁ TU TOKEN DE DISCOGS',
-    's1.desc':'Conseguilo en discogs.com → Settings → Developers → Generate new token. El token se usa solo en tu navegador.',
-    's1.label':'Token de Discogs',
-    's2.title':'ANALIZÁ TU CUENTA',
-    's2.desc':'El proceso lee tu historial de compras y tu colección completa, los compara y lista los discos que compraste pero nunca agregaste.',
-    's2.btn':'ANALIZAR MI CUENTA',
-    's3.title':'RESULTADOS Y DESCARGA',
-    's3.desc':'Una vez completado el análisis, vas a ver la lista de discos faltantes y podrás descargar el CSV para importar en Discogs.',
-    'dl.csv':'DESCARGAR CSV','dl.copy':'COPIAR IDs',
-    'note.title':'Cómo importar el CSV:',
-    'note.steps':' discogs.com → tu perfil → Collection → Import/Export → Upload CSV.',
-    'stat.missing':'Sin agregar','stat.total.purchases':'Compras totales','stat.user':'Usuario',
-    'col.id':'Release ID','col.artist':'Artista','col.title':'Título','col.year':'Año','col.format':'Formato','col.label':'Sello','col.price':'Precio pagado',
-    'empty.title':'¡Todo en orden!','empty.desc':'Todas tus compras ya están en tu colección.',
-    'err.notoken':'Ingresá tu token de Discogs primero.',
-    'err.auth':'Token inválido o expirado. Generá uno nuevo en discogs.com/settings/developers.',
-  },
-  en:{
-    'bc':'Tools','h1a':'DISCOGS','h1b':'TOOLS',
-    'hero.sub':'Utilities to manage your collection. Find purchases not yet added and generate the import CSV.',
-    'sec.badge':'🔒 Your token never leaves your browser — 100% local processing',
-    's1.title':'ENTER YOUR DISCOGS TOKEN',
-    's1.desc':'Get it at discogs.com → Settings → Developers → Generate new token. Token is used only in your browser.',
-    's1.label':'Discogs Token',
-    's2.title':'ANALYZE YOUR ACCOUNT',
-    's2.desc':'The process reads your purchase history and full collection, compares them and lists records you bought but never added.',
-    's2.btn':'ANALYZE MY ACCOUNT',
-    's3.title':'RESULTS & DOWNLOAD',
-    's3.desc':'Once the analysis is complete, you will see the list of missing records and can download the CSV to import into Discogs.',
-    'dl.csv':'DOWNLOAD CSV','dl.copy':'COPY IDs',
-    'note.title':'How to import the CSV:',
-    'note.steps':' discogs.com → your profile → Collection → Import/Export → Upload CSV.',
-    'stat.missing':'Not added','stat.total.purchases':'Total purchases','stat.user':'User',
-    'col.id':'Release ID','col.artist':'Artist','col.title':'Title','col.year':'Year','col.format':'Format','col.label':'Label','col.price':'Price paid',
-    'empty.title':'All good!','empty.desc':'All your purchases are already in your collection.',
-    'err.notoken':'Please enter your Discogs token first.',
-    'err.auth':'Invalid or expired token. Generate a new one at discogs.com/settings/developers.',
-  }
-};
 let lang='es';
+let allReleases=[];
+let artistName='';
+
 function setLang(l){
   lang=l;
   document.documentElement.lang=l;
   document.querySelectorAll('.lbtn').forEach(b=>b.setAttribute('aria-pressed',b.getAttribute('onclick').includes(`'${l}'`)?'true':'false'));
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(T[l][k])el.textContent=T[l][k];});
-  document.getElementById('tokenInp').placeholder=l==='es'?'Pegá tu token acá...':'Paste your token here...';
 }
 
-// ===== MOBILE MENU =====
 const menuBtn=document.getElementById('menuBtn');
 const mobileNav=document.getElementById('mobileNav');
 menuBtn.addEventListener('click',()=>{
   const open=mobileNav.classList.toggle('open');
   menuBtn.setAttribute('aria-expanded',String(open));
   mobileNav.setAttribute('aria-hidden',String(!open));
-  menuBtn.setAttribute('aria-label',open?(lang==='es'?'Cerrar menú':'Close menu'):(lang==='es'?'Abrir menú':'Open menu'));
-  if(open) mobileNav.querySelector('a').focus();
+  menuBtn.setAttribute('aria-label',open?'Cerrar menú':'Abrir menú');
+  if(open)mobileNav.querySelector('a').focus();
 });
 function closeMenu(){mobileNav.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');mobileNav.setAttribute('aria-hidden','true');}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});
 
-// ===== TOKEN VIS =====
-function toggleVis(){
-  const inp=document.getElementById('tokenInp');
-  const btn=document.getElementById('visBtn');
-  if(inp.type==='password'){inp.type='text';btn.textContent='🙈 OCULTAR';}
-  else{inp.type='password';btn.textContent='👁 VER';}
+function setArtist(name){
+  document.getElementById('artistInp').value=name;
+  document.getElementById('artistInp').focus();
 }
 
-// ===== DISCOGS API =====
-const API='https://api.discogs.com';
-let missingItems=[];
-let discogsUsername='';
-
-function getToken(){return document.getElementById('tokenInp').value.trim();}
-
-async function dFetch(url){
-  const r=await fetch(url,{
-    headers:{
-      'Authorization':`Discogs token=${getToken()}`,
-      'User-Agent':'MetiendoPuaTools/1.0 +https://metiendopua.vercel.app'
-    },
-    signal:AbortSignal.timeout(15000)
-  });
-  if(r.status===401) throw new Error('AUTH_ERROR');
-  if(!r.ok) throw new Error(`HTTP ${r.status}`);
-  return r.json();
+function showStatus(type, msg){
+  document.getElementById('statusWrap').innerHTML=`
+    <div class="status-msg status-${type}" role="${type==='err'?'alert':'status'}">
+      <div class="status-dot" aria-hidden="true"></div>
+      <span>${msg}</span>
+    </div>`;
 }
 
-async function getAllPages(baseUrl,itemsKey,onPage){
-  let page=1, all=[], totalPages=1;
-  do{
-    const sep=baseUrl.includes('?')?'&':'?';
-    const url=`${baseUrl}${sep}page=${page}&per_page=100`;
-    const data=await dFetch(url);
-    // Debug: log all top-level keys on first page
-    if(page===1){
-      const keys=Object.keys(data);
-      log(`Respuesta API — claves: [${keys.join(', ')}]`);
-      const pagination=data.pagination;
-      if(pagination) log(`Paginación: ${pagination.items||0} items, ${pagination.pages||1} páginas`);
-    }
-    const items=data[itemsKey]||[];
-    // If key not found, try to auto-detect
-    if(items.length===0 && page===1){
-      const arrayKeys=Object.keys(data).filter(k=>Array.isArray(data[k]));
-      if(arrayKeys.length>0){
-        log(`Clave "${itemsKey}" vacía, claves con arrays: [${arrayKeys.join(', ')}]`,'warn');
-      }
-    }
-    all=all.concat(items);
-    totalPages=data.pagination?.pages||1;
-    if(onPage) onPage(page,totalPages,all.length);
-    page++;
-    if(page<=totalPages) await sleep(1100); // Discogs: 60 req/min
-  }while(page<=totalPages);
-  return all;
+function setProgress(pct, text){
+  const outer=document.getElementById('progOuter');
+  const inner=document.getElementById('progInner');
+  const txt=document.getElementById('progText');
+  outer.style.display='block';
+  txt.style.display='block';
+  inner.style.width=pct+'%';
+  outer.setAttribute('aria-valuenow',pct);
+  txt.textContent=text;
 }
 
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+async function startExport(){
+  const q=document.getElementById('artistInp').value.trim();
+  if(!q){document.getElementById('artistInp').focus();return;}
 
-// ===== LOG / PROGRESS =====
-function log(msg,type=''){
-  const box=document.getElementById('logBox');
-  box.style.display='block';
-  const cls=type==='ok'?'log-ok':type==='warn'?'log-warn':type==='err'?'log-err':'';
-  box.innerHTML+=`<div class="${cls}">→ ${msg}</div>`;
-  box.scrollTop=box.scrollHeight;
-}
-function setProgress(pct,text){
-  document.getElementById('progInner').style.width=pct+'%';
-  document.getElementById('progBar').setAttribute('aria-valuenow',pct);
-  document.getElementById('progText').textContent=text;
-}
-function setStep(n,state){
-  document.getElementById(`step${n}`).className='step '+(state||'');
-}
+  allReleases=[];
+  artistName='';
+  document.getElementById('exportBtn').disabled=true;
+  document.getElementById('previewWrap').style.display='none';
+  document.getElementById('progOuter').style.display='none';
+  document.getElementById('progText').style.display='none';
 
-// ===== MAIN PROCESS =====
-async function startProcess(){
-  const token=getToken();
-  if(!token){alert(T[lang]['err.notoken']);return;}
-
-  // Reset UI
-  document.getElementById('startBtn').disabled=true;
-  document.getElementById('progressWrap').style.display='block';
-  document.getElementById('resultsWrap').style.display='none';
-  document.getElementById('logBox').innerHTML='';
-  missingItems=[];
-  setStep(2,'active');
+  // Step 1: Find artist in Discogs
+  showStatus('info', lang==='es'?`Buscando "${q}" en Discogs...`:`Searching "${q}" in Discogs...`);
 
   try{
-    // 1. Identity
-    setProgress(5,'Verificando token...');
-    log('Conectando con Discogs...');
-    const identity=await dFetch(`${API}/oauth/identity`);
-    discogsUsername=identity.username;
-    log(`Usuario: ${discogsUsername}`,'ok');
-    setProgress(10,'Cargando colección...');
+    const sr=await fetch(`/api/search?action=search_artist&q=${encodeURIComponent(q)}`);
+    if(!sr.ok) throw new Error(`HTTP ${sr.status}`);
+    const sData=await sr.json();
+    const results=(sData.results||[]).filter(x=>x.type==='artist');
 
-    // 2. Collection (all pages)
-    log('Obteniendo colección completa...');
-    const collItems=await getAllPages(
-      `${API}/users/${discogsUsername}/collection/folders/0/releases`,
-      'releases',
-      (p,t,n)=>{
-        setProgress(10+Math.round((p/t)*25),`Colección: página ${p}/${t} (${n} discos)`);
-        log(`Colección página ${p}/${t}`);
-      }
-    );
-    const collIds=new Set(collItems.map(i=>i.basic_information?.id||i.id).filter(Boolean));
-    log(`Colección: ${collIds.size} discos`,'ok');
-    setProgress(36,'Cargando historial de compras...');
-
-    // 3. Purchases (buyer side — /marketplace/purchases endpoint)
-    log('Obteniendo historial de compras...');
-    let purchases=[];
-    try{
-      purchases=await getAllPages(
-        `${API}/marketplace/purchases?status=All&sort=created&sort_order=desc`,
-        'purchases',
-        (p,t,n)=>{
-          setProgress(36+Math.round((p/t)*25),`Compras: página ${p}/${t} (${n} compras)`);
-          log(`Compras página ${p}/${t}`);
-        }
+    if(!results.length){
+      showStatus('err',
+        lang==='es'
+          ?`No se encontró "${q}" como artista en Discogs.`
+          :`"${q}" was not found as an artist in Discogs.`
       );
-      log(`Compras encontradas: ${purchases.length}`,'ok');
-    }catch(e){
-      log(`Nota: /marketplace/purchases devolvió error (${e.message}), intentando con /marketplace/orders...`,'warn');
-      // fallback to orders endpoint
-      purchases=await getAllPages(
-        `${API}/marketplace/orders?status=All&sort=created&sort_order=desc`,
-        'orders',
-        (p,t,n)=>{
-          setProgress(36+Math.round((p/t)*25),`Órdenes: página ${p}/${t} (${n} órdenes)`);
-          log(`Órdenes página ${p}/${t}`);
-        }
-      );
-      log(`Órdenes encontradas: ${purchases.length}`,'ok');
-    }
-    setProgress(62,'Comparando compras con colección...');
-
-    // 4. Compare — handle both purchases and orders response shapes
-    const seen=new Set();
-    let totalPurchased=0;
-    for(const purchase of purchases){
-      // /marketplace/purchases returns items directly on the purchase object
-      // /marketplace/orders returns items in an items array
-      const items=purchase.items||[purchase].filter(p=>p.release?.id);
-      const status=purchase.status||'';
-      // For orders endpoint, filter by valid statuses; for purchases endpoint allow all
-      const validStatuses=['Shipped','Received','Merged','Invoice Sent','Payment Received','Payment Pending','In Progress'];
-      if(purchase.items && !validStatuses.includes(status)) continue;
-
-      for(const item of items){
-        // purchases endpoint: release info at item.release or top-level
-        const release=item.release||purchase.release||{};
-        const rid=release.id;
-        if(!rid) continue;
-        totalPurchased++;
-        if(seen.has(rid)) continue;
-        seen.add(rid);
-        if(!collIds.has(rid)){
-          const price=item.price||purchase.price||{};
-          missingItems.push({
-            release_id:rid,
-            title:release.description||release.title||'—',
-            artist:extractArtist(release.description||''),
-            year:'',format:'',label:'',catno:'',
-            order_id:purchase.id||'',
-            price:price.value?`${price.value} ${price.currency||''}`.trim():'—'
-          });
-        }
-      }
-    }
-    log(`Discos comprados únicos: ${seen.size}`);
-    log(`Sin agregar a colección: ${missingItems.length}`,'warn');
-    setProgress(65,'Obteniendo detalles de discos faltantes...');
-
-    // 5. Enrich missing items
-    for(let i=0;i<missingItems.length;i++){
-      try{
-        const d=await dFetch(`${API}/releases/${missingItems[i].release_id}`);
-        missingItems[i].year=d.year||'';
-        missingItems[i].format=(d.formats||[])[0]?.name||'';
-        missingItems[i].label=(d.labels||[])[0]?.name||'';
-        missingItems[i].catno=(d.labels||[])[0]?.catno||'';
-        missingItems[i].artist=(d.artists||[]).map(a=>a.name.replace(/\s*\(\d+\)$/,'')).join(', ')||missingItems[i].artist;
-        missingItems[i].title=d.title||missingItems[i].title;
-        const pct=65+Math.round(((i+1)/missingItems.length)*33);
-        setProgress(pct,`Detalle ${i+1} de ${missingItems.length}...`);
-        await sleep(700);
-      }catch(e){
-        log(`No se pudo obtener detalle de ID ${missingItems[i].release_id}`,'warn');
-      }
+      document.getElementById('exportBtn').disabled=false;
+      return;
     }
 
-    setProgress(100,'¡Análisis completado!');
-    log('Proceso finalizado.','ok');
-    setStep(2,'done');
-    setStep(3,'active');
-    showResults(totalPurchased);
+    const exact=results.find(r=>r.title.toLowerCase()===q.toLowerCase());
+    const best=exact||results[0];
+    artistName=best.title;
+    showStatus('ok', lang==='es'?`Artista encontrado: ${best.title}. Cargando discografía...`:`Artist found: ${best.title}. Loading discography...`);
+    setProgress(10, lang==='es'?'Obteniendo discografía...':'Getting discography...');
+
+    // Step 2: Get all releases (paginated)
+    let page=1, totalPages=1;
+    do{
+      const rr=await fetch(`/api/search?action=artist&artist_id=${best.id}&page=${page}`);
+      // We only need releases from artist endpoint
+      const rd=rr.ok?await rr.json():{releases:{releases:[],pagination:{}}};
+      const rels=rd.releases?.releases||[];
+      allReleases=allReleases.concat(rels);
+      totalPages=rd.releases?.pagination?.pages||1;
+      const pct=10+Math.round((page/totalPages)*85);
+      setProgress(pct, lang==='es'
+        ?`Página ${page} de ${totalPages} — ${allReleases.length} lanzamientos`
+        :`Page ${page} of ${totalPages} — ${allReleases.length} releases`);
+      page++;
+      if(page<=totalPages) await new Promise(r=>setTimeout(r,600));
+    }while(page<=totalPages);
+
+    setProgress(100, lang==='es'?'¡Listo!':'Done!');
+    showStatus('ok', lang==='es'
+      ?`${allReleases.length} lanzamientos encontrados para ${artistName}.`
+      :`${allReleases.length} releases found for ${artistName}.`);
+    showPreview();
 
   }catch(err){
-    if(err.message==='AUTH_ERROR'){
-      log(T[lang]['err.auth'],'err');
-      setProgress(0,'Error de autenticación');
-    }else{
-      log(`ERROR: ${err.message}`,'err');
-      setProgress(0,'Error — '+err.message);
-    }
-    setStep(2,'');
-    document.getElementById('startBtn').disabled=false;
+    showStatus('err', `Error: ${err.message}`);
   }
+  document.getElementById('exportBtn').disabled=false;
 }
 
-function extractArtist(desc){
-  const parts=desc.split(' - ');
-  return parts.length>1?parts[0].trim():'';
-}
+// artist endpoint returns all pages already in the backend for 100/page
+// but since we fetch page by page we need to override the api handler
+// Actually the api/search?action=artist returns releases in one call (per_page=100 page 1)
+// For artists with >100 releases, need multiple pages — let's handle that
 
-// ===== SHOW RESULTS =====
-function showResults(totalPurchased){
-  const wrap=document.getElementById('resultsWrap');
+function showPreview(){
+  const wrap=document.getElementById('previewWrap');
   wrap.style.display='block';
 
   // Stats
   document.getElementById('statRow').innerHTML=`
-    <div class="stat-box" role="listitem"><div class="stat-n">${missingItems.length}</div><div class="stat-l">${T[lang]['stat.missing']}</div></div>
-    <div class="stat-box" role="listitem"><div class="stat-n" style="color:var(--gray2);">${totalPurchased}</div><div class="stat-l">${T[lang]['stat.total.purchases']}</div></div>
-    <div class="stat-box green" role="listitem"><div class="stat-n" style="color:#86efac;">${discogsUsername}</div><div class="stat-l">${T[lang]['stat.user']}</div></div>`;
+    <div class="stat-box"><div class="stat-n">${allReleases.length}</div><div class="stat-l">${lang==='es'?'Lanzamientos':'Releases'}</div></div>
+    <div class="stat-box"><div class="stat-n" style="color:var(--gray2);">${artistName}</div><div class="stat-l">${lang==='es'?'Artista':'Artist'}</div></div>`;
 
-  const tbl=document.getElementById('tblWrap');
-  if(missingItems.length===0){
-    tbl.innerHTML=`<div class="empty-msg"><div class="ei">🎉</div><h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:8px;">${T[lang]['empty.title']}</h3><p>${T[lang]['empty.desc']}</p></div>`;
-    return;
-  }
-
-  // Sort alphabetically by artist
-  const sorted=[...missingItems].sort((a,b)=>(a.artist||'').localeCompare(b.artist||''));
-
-  let html=`<table role="grid" aria-label="Discos sin agregar a la colección">
-    <thead><tr>
-      <th scope="col">${T[lang]['col.id']}</th>
-      <th scope="col">${T[lang]['col.artist']}</th>
-      <th scope="col">${T[lang]['col.title']}</th>
-      <th scope="col">${T[lang]['col.year']}</th>
-      <th scope="col">${T[lang]['col.format']}</th>
-      <th scope="col">${T[lang]['col.label']}</th>
-      <th scope="col">${T[lang]['col.price']}</th>
-    </tr></thead><tbody>`;
-  sorted.forEach(item=>{
+  // Preview table (first 10)
+  const preview=allReleases.slice(0,10);
+  let html=`<table><thead><tr>
+    <th>${lang==='es'?'Año':'Year'}</th>
+    <th>${lang==='es'?'Título':'Title'}</th>
+    <th>${lang==='es'?'Formato':'Format'}</th>
+    <th>${lang==='es'?'Sello':'Label'}</th>
+    <th>${lang==='es'?'País':'Country'}</th>
+    <th>Rol</th>
+  </tr></thead><tbody>`;
+  preview.forEach(r=>{
     html+=`<tr>
-      <td><a href="https://www.discogs.com/release/${item.release_id}" target="_blank" rel="noopener" aria-label="Ver ${item.title} en Discogs">${item.release_id}</a></td>
-      <td>${item.artist||'—'}</td>
-      <td>${item.title||'—'}</td>
-      <td>${item.year||'—'}</td>
-      <td>${item.format||'—'}</td>
-      <td>${item.label||'—'}</td>
-      <td>${item.price||'—'}</td>
+      <td>${r.year||'—'}</td>
+      <td>${esc(r.title||'—')}</td>
+      <td>${esc(r.format||'—')}</td>
+      <td>${esc(r.label||'—')}</td>
+      <td>${esc(r.country||'—')}</td>
+      <td>${esc(r.role||'Main')}</td>
     </tr>`;
   });
   html+='</tbody></table>';
-  tbl.innerHTML=html;
-
-  document.getElementById('actionRow').style.display='flex';
-  document.getElementById('csvNote').style.display='block';
-  document.getElementById('startBtn').disabled=false;
-  wrap.scrollIntoView({behavior:'smooth'});
+  document.getElementById('tblWrap').innerHTML=html;
+  document.getElementById('hintTxt').innerHTML=`<strong>${lang==='es'?'El CSV incluye:':'The CSV includes:'}</strong> ${lang==='es'?'título, año, formato, sello, catálogo, país, rol y link a Discogs de cada lanzamiento.':'title, year, format, label, catalog number, country, role and Discogs link for each release.'}`;
 }
 
-// ===== DOWNLOAD CSV =====
 function downloadCSV(){
-  const headers=['Release Id','Collection Folder Id','Date Added',
-    'Collection Media Condition','Collection Sleeve Condition','Collection Notes'];
-  const rows=missingItems.map(i=>[
-    i.release_id,'1',
-    new Date().toISOString().substring(0,10),
-    '','',
-    `Importado desde compra Discogs${i.order_id?' #'+i.order_id:''}`
+  if(!allReleases.length) return;
+
+  const headers=lang==='es'
+    ?['Artista','Título','Año','Formato','Sello','Catálogo','País','Rol','ID Discogs','URL Discogs']
+    :['Artist','Title','Year','Format','Label','Catalog','Country','Role','Discogs ID','Discogs URL'];
+
+  const rows=allReleases.map(r=>[
+    artistName,
+    r.title||'',
+    r.year||'',
+    r.format||'',
+    r.label||'',
+    r.catno||'',
+    r.country||'',
+    r.role||'Main',
+    r.id||'',
+    r.id?`https://www.discogs.com/release/${r.id}`:''
   ]);
+
   const csv=[headers,...rows]
-    .map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','))
+    .map(row=>row.map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','))
     .join('\n');
+
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;
-  a.download=`discogs-import-${new Date().toISOString().substring(0,10)}.csv`;
+  a.download=`discografia-${artistName.replace(/[^a-z0-9]/gi,'_').toLowerCase()}-${new Date().toISOString().substring(0,10)}.csv`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
-// ===== COPY IDs =====
-function copyIds(){
-  const ids=missingItems.map(i=>i.release_id).join('\n');
-  navigator.clipboard.writeText(ids).then(()=>{
-    const btn=document.getElementById('copyBtn');
-    const orig=btn.querySelector('span')?.textContent||btn.textContent;
-    if(btn.querySelector('span')) btn.querySelector('span').textContent='✓ COPIADO';
-    else btn.textContent='✓ COPIADO';
-    setTimeout(()=>{
-      if(btn.querySelector('span')) btn.querySelector('span').textContent=T[lang]['dl.copy'];
-      else btn.textContent=T[lang]['dl.copy'];
-    },2500);
-  });
-}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 </script>
 </body>
 </html>
