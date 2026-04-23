@@ -128,7 +128,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,0.
 .modal-frame{position:relative;padding-bottom:56.25%;}
 .modal-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
 
-/* FOOTER */
+/* ===== FOOTER ===== */
+footer{background:var(--black);border-top:1px solid var(--border);padding:56px 40px 36px;text-align:center;}
+.foot-logo{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:4px;margin-bottom:6px;}
+.foot-logo span{color:var(--orange);}
+.foot-sub{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gray);margin-bottom:10px;}
+.foot-desc{font-size:12px;color:var(--gray);margin-bottom:28px;line-height:1.6;max-width:440px;margin-left:auto;margin-right:auto;}
+.foot-links{display:flex;justify-content:center;gap:28px;list-style:none;margin-bottom:32px;flex-wrap:wrap;}
+.foot-links a{color:var(--gray);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;transition:color 0.2s;padding:4px;}
+.foot-links a:hover,.foot-links a:focus-visible{color:var(--orange);}
+.foot-divider{width:40px;height:1px;background:var(--border);margin:0 auto 28px;}
+.foot-copy{font-size:11px;color:#444;letter-spacing:1px;}
 footer{background:var(--black);border-top:1px solid var(--border);padding:56px 40px 36px;text-align:center;}
 .foot-logo{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:4px;margin-bottom:6px;}
 .foot-logo span{color:var(--orange);}
@@ -138,7 +148,13 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:56px 4
 .foot-links a:hover,.foot-links a:focus-visible{color:var(--orange);}
 .foot-copy{font-size:11px;color:#333;letter-spacing:1px;}
 
-/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .menu-btn{display:flex;}
+  footer{padding:40px 24px 28px;}
+  .foot-links{gap:16px;}
+}
 @media(max-width:900px){
   nav{padding:0 20px;}
   .nav-links{display:none;}
@@ -192,9 +208,7 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:56px 4
   <a href="coleccion.html" onclick="closeMobileMenu()">Colección</a>
   <a href="buscar.html" onclick="closeMobileMenu()">Buscador</a>
   <a href="herramientas.html" onclick="closeMobileMenu()">Herramientas</a>
-  <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal ↗</a>
-  <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal YouTube ↗</a>
-  
+  <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener" onclick="closeMobileMenu()">Canal ↗</a>
   <div class="mobile-nav-footer">
     <button class="lang-btn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
     <button class="lang-btn" aria-pressed="false" onclick="setLang('en')" lang="en">EN</button>
@@ -285,16 +299,22 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:56px 4
 
 </main>
 
-<!-- FOOTER -->
 <footer role="contentinfo">
+  <div class="pua-icon" aria-hidden="true" style="margin:0 auto 16px;"></div>
   <p class="foot-logo" aria-label="Metiendo Púa">METIENDO <span>PÚA</span></p>
-  <p class="foot-tag">70s · 80s · 90s Rock & Pop en Vinilo — Uruguay</p>
+  <p class="foot-sub">70s &middot; 80s &middot; 90s Rock &amp; Pop en Vinilo</p>
+  <p class="foot-desc">Música auténtica desde vinilos y CDs originales. Canal de YouTube desde Uruguay para coleccionistas y amantes del sonido analógico.</p>
+  <div class="foot-divider" aria-hidden="true"></div>
   <ul class="foot-links" role="list">
-    <li><a href="#videos" data-i18n="nav.videos">Videos</a></li>
-    <li><a href="coleccion.html" data-i18n="nav.col">Colección</a></li>
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="index.html#videos">Videos</a></li>
+    <li><a href="coleccion.html">Colección</a></li>
+    <li><a href="buscar.html">Buscador</a></li>
+    <li><a href="herramientas.html">Herramientas</a></li>
     <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">YouTube ↗</a></li>
+    <li><a href="https://www.discogs.com" target="_blank" rel="noopener">Discogs ↗</a></li>
   </ul>
-  <p class="foot-copy" data-i18n="foot.copy">© 2025 Metiendo Púa — Uruguay</p>
+  <p class="foot-copy">© 2025 Metiendo Púa — Uruguay</p>
 </footer>
 
 <!-- VIDEO MODAL -->
@@ -350,28 +370,34 @@ const T={
 let lang='es';
 function setLang(l){
   lang=l;
-  document.querySelectorAll('.lang-btn').forEach(b=>{b.setAttribute('aria-pressed',b.getAttribute('onclick').includes(`'${l}'`)?'true':'false');});
+  document.documentElement.lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>{b.setAttribute('aria-pressed',b.getAttribute('onclick').includes("'"+l+"'")?'true':'false');});
+  document.querySelectorAll('[data-i18n]').forEach(el=>{var k=el.getAttribute('data-i18n');if(T[l]&&T[l][k])el.textContent=T[l][k];});
+}'`)?'true':'false');});
   document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(T[l][k])el.textContent=T[l][k];});
   document.getElementById('wikiInp').placeholder=l==='es'?'Ej: Pink Floyd, Thriller, Led Zeppelin...':'E.g. Pink Floyd, Thriller, Led Zeppelin...';
   document.documentElement.lang=l;
 }
 
 // ===== MOBILE MENU =====
-const menuBtn=document.getElementById('menuBtn');
-const mobileNav=document.getElementById('mobileNav');
-menuBtn.addEventListener('click',()=>{
-  const open=mobileNav.classList.toggle('open');
-  menuBtn.setAttribute('aria-expanded',open);
-  mobileNav.setAttribute('aria-hidden',!open);
-  menuBtn.setAttribute('aria-label',open?'Cerrar menú':'Abrir menú');
-  if(open) mobileNav.querySelector('a').focus();
-});
-function closeMobileMenu(){
-  mobileNav.classList.remove('open');
-  menuBtn.setAttribute('aria-expanded','false');
-  mobileNav.setAttribute('aria-hidden','true');
+const menuBtn = document.getElementById('menuBtn');
+const mobileNav = document.getElementById('mobileNav');
+if (menuBtn && mobileNav) {
+  menuBtn.addEventListener('click', function() {
+    var open = mobileNav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    mobileNav.setAttribute('aria-hidden', open ? 'false' : 'true');
+    menuBtn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    if (open) { var first = mobileNav.querySelector('a'); if (first) first.focus(); }
+  });
 }
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMobileMenu();});
+function closeMobileMenu() {
+  if (!mobileNav) return;
+  mobileNav.classList.remove('open');
+  if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+  mobileNav.setAttribute('aria-hidden', 'true');
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMobileMenu(); });
 
 // ===== YOUTUBE VIDEOS (via Vercel function — YouTube Data API v3) =====
 async function loadVideos(){
@@ -413,7 +439,17 @@ async function loadVideos(){
     });
   }catch(err){
     console.error('YouTube load error:',err.message);
-    grid.innerHTML=`<div style="grid-column:1/-1;background:var(--card);border:1px solid var(--border);padding:48px 32px;text-align:center;"><p style="font-size:42px;margin-bottom:16px;">📺</p><h3 style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;margin-bottom:10px;">Visitá el canal en YouTube</h3><p style="color:var(--gray);font-size:12px;margin-bottom:20px;">${err.message.includes('YOUTUBE_API_KEY')?'Falta configurar YOUTUBE_API_KEY en Vercel → Environment Variables':''}</p><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener" class="btn btn-fill">Abrir Canal ↗</a></div>`;
+    const isKeyErr = err.message.includes('YOUTUBE_API_KEY');
+    const errNote = isKeyErr
+      ? '<p style="color:var(--gray);font-size:12px;margin-bottom:8px;">Configurá <code style="background:#222;padding:2px 6px;">YOUTUBE_API_KEY</code> en Vercel → Environment Variables.</p>'
+      : '<p style="color:var(--gray);font-size:12px;margin-bottom:8px;">No se pudieron cargar los videos automáticamente.</p>';
+    grid.innerHTML=`<div style="grid-column:1/-1;background:var(--card);border:1px solid var(--border);padding:48px 32px;text-align:center;">
+      <p style="font-size:48px;margin-bottom:16px;" aria-hidden="true">📺</p>
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:12px;">Videos del Canal</h3>
+      ${errNote}
+      <p style="color:var(--gray2);font-size:13px;margin-bottom:24px;line-height:1.7;">Visitá el canal en YouTube para ver todos los videos de la colección.</p>
+      <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener" class="btn btn-fill" style="text-decoration:none;">Ver Canal en YouTube ↗</a>
+    </div>`;
   }
 }
 

@@ -113,7 +113,17 @@ tbody td:first-child{color:var(--white);font-weight:600;}
 .chip{background:var(--card);border:1px solid var(--border);color:var(--gray2);font-size:12px;padding:6px 13px;cursor:pointer;transition:all 0.2s;}
 .chip:hover,.chip:focus-visible{border-color:var(--orange);color:var(--orange);background:var(--odim);}
 
-/* FOOTER */
+/* ===== FOOTER ===== */
+footer{background:var(--black);border-top:1px solid var(--border);padding:56px 40px 36px;text-align:center;}
+.foot-logo{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:4px;margin-bottom:6px;}
+.foot-logo span{color:var(--orange);}
+.foot-sub{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gray);margin-bottom:10px;}
+.foot-desc{font-size:12px;color:var(--gray);margin-bottom:28px;line-height:1.6;max-width:440px;margin-left:auto;margin-right:auto;}
+.foot-links{display:flex;justify-content:center;gap:28px;list-style:none;margin-bottom:32px;flex-wrap:wrap;}
+.foot-links a{color:var(--gray);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;transition:color 0.2s;padding:4px;}
+.foot-links a:hover,.foot-links a:focus-visible{color:var(--orange);}
+.foot-divider{width:40px;height:1px;background:var(--border);margin:0 auto 28px;}
+.foot-copy{font-size:11px;color:#444;letter-spacing:1px;}
 footer{background:var(--black);border-top:1px solid var(--border);padding:48px 40px 32px;text-align:center;}
 .foot-logo{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:4px;margin-bottom:6px;}
 .foot-logo span{color:var(--orange);}
@@ -137,38 +147,37 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
 <body>
 <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-<nav role="navigation" aria-label="Navegación principal">
-  <a href="index.html" class="nav-logo" aria-label="Metiendo Púa - Inicio">
-    <div class="pua" aria-hidden="true"></div>
-    <span class="nav-brand">METIENDO <span>PÚA</span></span>
+<nav role="navigation" aria-label="Navegacion principal">
+  <a href="index.html" class="nav-logo" aria-label="Metiendo Pua - Inicio">
+    <div class="pua-icon" aria-hidden="true"></div>
+    <span class="nav-brand">METIENDO <span>PUA</span></span>
   </a>
   <ul class="nav-links" role="list">
     <li><a href="index.html#videos">Videos</a></li>
-    <li><a href="coleccion.html">Colección</a></li>
+    <li><a href="coleccion.html">Coleccion</a></li>
     <li><a href="buscar.html">Buscador</a></li>
     <li><a href="herramientas.html" aria-current="page">Herramientas</a></li>
-    <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal ↗</a></li>
+    <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal &#8599;</a></li>
   </ul>
   <div class="nav-right">
     <div class="lang-group" role="group" aria-label="Idioma">
-      <button class="lbtn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
-      <button class="lbtn" aria-pressed="false" onclick="setLang('en')" lang="en">EN</button>
+      <button class="lang-btn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
+      <button class="lang-btn" aria-pressed="false" onclick="setLang('en')" lang="en">EN</button>
     </div>
-    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menú">
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menu">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
     </button>
   </div>
 </nav>
-
-<nav id="mobileNav" class="mobile-nav" aria-label="Menú móvil" aria-hidden="true">
-  <a href="index.html#videos" onclick="closeMenu()">Videos</a>
-  <a href="coleccion.html" onclick="closeMenu()">Colección</a>
-  <a href="buscar.html" onclick="closeMenu()">Buscador</a>
-  <a href="herramientas.html" aria-current="page">Herramientas</a>
-  <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">Canal ↗</a>
+<nav id="mobileNav" class="mobile-nav" aria-label="Menu movil" aria-hidden="true">
+  <a href="index.html#videos" onclick="closeMobileMenu()">Videos</a>
+  <a href="coleccion.html" onclick="closeMobileMenu()">Coleccion</a>
+  <a href="buscar.html" onclick="closeMobileMenu()">Buscador</a>
+  <a href="herramientas.html" onclick="closeMobileMenu()" aria-current="page">Herramientas</a>
+  <a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener" onclick="closeMobileMenu()">Canal &#8599;</a>
   <div class="mobile-nav-footer">
-    <button class="lbtn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
-    <button class="lbtn" aria-pressed="false" onclick="setLang('en')" lang="en">EN</button>
+    <button class="lang-btn" aria-pressed="true" onclick="setLang('es')" lang="es">ES</button>
+    <button class="lang-btn" aria-pressed="false" onclick="setLang('en')" lang="en">EN</button>
   </div>
 </nav>
 
@@ -238,13 +247,19 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:48px 4
 </main>
 
 <footer role="contentinfo">
+  <div class="pua-icon" aria-hidden="true" style="margin:0 auto 16px;"></div>
   <p class="foot-logo" aria-label="Metiendo Púa">METIENDO <span>PÚA</span></p>
-  <p class="foot-tag">70s · 80s · 90s Rock & Pop en Vinilo — Uruguay</p>
+  <p class="foot-sub">70s &middot; 80s &middot; 90s Rock &amp; Pop en Vinilo</p>
+  <p class="foot-desc">Música auténtica desde vinilos y CDs originales. Canal de YouTube desde Uruguay para coleccionistas y amantes del sonido analógico.</p>
+  <div class="foot-divider" aria-hidden="true"></div>
   <ul class="foot-links" role="list">
     <li><a href="index.html">Inicio</a></li>
+    <li><a href="index.html#videos">Videos</a></li>
     <li><a href="coleccion.html">Colección</a></li>
     <li><a href="buscar.html">Buscador</a></li>
+    <li><a href="herramientas.html">Herramientas</a></li>
     <li><a href="https://youtube.com/@metiendopuauy" target="_blank" rel="noopener">YouTube ↗</a></li>
+    <li><a href="https://www.discogs.com" target="_blank" rel="noopener">Discogs ↗</a></li>
   </ul>
   <p class="foot-copy">© 2025 Metiendo Púa — Uruguay</p>
 </footer>
